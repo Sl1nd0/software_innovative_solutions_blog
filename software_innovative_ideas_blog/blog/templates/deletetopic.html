@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-
 {% load static %}
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -59,17 +58,33 @@
     </nav>
 
     <div class="pt-5 container">
+
         <div class="row">
             <div class="col-md-12">
-                <div class="pt-3 pb-4 container ">
-                    <div class="pb-3 card">
-                        <h5 class="card-header">Topics</h5>
-                        <div class="card-body">
-                            {% for x in topics %}
-                            <p><a href="{{x.id}}" class="card-text">{{ x.topic }}</a></p>
-                            {% endfor %}
-                            <a href="/addtopic/" class="btn btn-primary">Add</a>
-                            <a href="/landing/" class="btn btn-secondary">Go back</a>
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                    <div class="pt-5 container">
+                        <div class="row">
+                            <form action="/deletetopic/" width="50%" method="POST">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    <div class="pt-3 container">
+                                        <div class="pb-3 card">
+                                            <h5 class="card-header">Topics</h5>
+                                            <div class="card-body">
+                                                <h4></h4>
+                                                <div class="pb-4 container">
+                                                    <label for="topic">topic:</label>
+                                                    <input type="text" class="form-control" name="topic" id="topic" value="{{topic}}" style="font-size: 18pt; height: 35px; width:250px;" disabled>
+                                                </div>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <a href="/topics/" class="btn btn-secondary">Go Back</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -78,5 +93,4 @@
     </div>
 
 </body>
-
 </html>

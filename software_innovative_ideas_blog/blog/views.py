@@ -92,6 +92,22 @@ def topics(request):
     template = loader.get_template('topics.html')
     context = {}
     return HttpResponse(template.render(context, request))
+    
+def edittopic(request, id):
+    #Add edit handler
+    topic = topics_queries.get_topic_by_id_query(id)
+
+    template = loader.get_template('edittopic.html')
+    context = {"topic": topic["result"]["topic"]}
+    return HttpResponse(template.render(context, request))
+    
+def deletetopic(request, id):
+    #Add delete handler
+    topic = topics_queries.get_topic_by_id_query(id)
+
+    template = loader.get_template('deletetopic.html')
+    context = {"topic": topic["result"]["topic"]}
+    return HttpResponse(template.render(context, request))
 
 def addtopic(request):
 

@@ -3,7 +3,12 @@ from datetime import datetime
 
 # Create your models here.
 # Register your models here.
+class UserRoles(models.Model):	
+	role =  models.CharField(max_length=80, default= '')
+	role_date = models.DateTimeField(max_length=50)
+
 class Users(models.Model):
+	User_roleID = models.ForeignKey(UserRoles, on_delete=models.CASCADE, null=True)
 	user_name = models.CharField(max_length=255)
 	name = models.CharField(max_length=255, default= '')
 	birthdate = models.CharField(max_length=255)
@@ -12,7 +17,7 @@ class Users(models.Model):
 	identifier = models.CharField(max_length=255, default= '')
 	password = models.CharField(max_length=255)
 	cell_number = models.CharField(max_length=80)
-	user_date = models.DateTimeField(max_length=50)
+	user_date = models.DateTimeField(max_length=50)	
 
 class Ideas(models.Model):
 	userID = models.ForeignKey(Users, on_delete=models.CASCADE)
