@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <title>Software Innovative Ideas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static '.\jquery\dist\jquery.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
+    <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
+    <script src="{% static '.\services\test.js' %}"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-14">
+                <div class="jumbotron">
+                    <center><h1>Software Innovative Ideas</h1></center> <!--For demo purposes-->
+                    <p class="lead">
+                        <img src="{% static '.\bootstrap\dist\css\website\images\homepage.jpg' %}" class="rounded" alt="home page image" width="100%" height="100%">
+                        This is a simple blog where software developers share ideas with each other
+                    </p>
+                    <center>
+                        <a class="btn btn-primary btn-lg" href="/createaccount/" role="button">Create account</a>
+                        <a class="btn btn-primary btn-lg" href="/login/" role="button">Log in</a>
+                    </center>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
