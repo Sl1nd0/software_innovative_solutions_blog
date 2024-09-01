@@ -15,12 +15,13 @@ def add_topic(topic):
 
            if topic_entity.pk > 0:
             result["success"] = True
-            result["result"] = user
-            result["Error"] = None
+            result["result"] = topic
+            result["Error"] = []
            return result;
 
     except Exception as error:
+            print(error)
             result["success"] = False
-            result["result"] = user
+            result["result"] = topic
             result["Error"].append(error)
     return result

@@ -19,7 +19,7 @@ def add_user(user):
            if user_entity.pk > 0:
             result["success"] = True
             result["result"] = user
-            result["Error"] = None
+            result["Error"] = []
            return result;
 
     except Exception as error:

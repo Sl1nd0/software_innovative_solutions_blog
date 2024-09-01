@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+{% load static %}
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -6,16 +7,17 @@
     <title>Software Innovative Ideas</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="..\scripts\jquery\dist\jquery.js"></script>
-    <link rel="stylesheet" href="..\scripts\bootstrap\dist\css\bootstrap.css">
-    <script src="..\scripts\bootstrap\dist\js\bootstrap.min.js"></script>
-    <link rel="stylesheet" href="..\scripts\bootstrap\dist\css\website\landing.css">
-    <script src="..\scripts\services\test.js"></script>
+    <script src="{% static '.\jquery\dist\jquery.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
+    <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
+    <script src="{% static '.\services\landing.js' %}"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="./landing.html">Software Innovative Ideas</a>
+        <a class="navbar-brand" href="#">Software Innovative Ideas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,22 +37,22 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.html">logout</a>
+                    <a class="nav-link" href="/logout/">logout</a>
                 </li>
                 <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-    </li>-->
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>-->
             </ul>
         </div>
     </nav>
@@ -61,28 +63,33 @@
             <div class="col-md-12">
                 <div class="col-md-4"></div>
                 <div class="col-md-8">
-                       <div class="pt-5 container">
-						<div class="row"> 
-							<div class="col-md-12">
-								<div class="pt-3 container">
-									<div class="pb-3 card">
-										<h5 class="card-header">Topics</h5>
-										<div class="card-body">
-                                <h4></h4> 
-                                <div class="pb-4 container">
-                                    <label for="topic">topic:</label>
-                            <input type="text" class="form-control" name="topic" id="topic" style="font-size: 18pt; height: 35px; width:250px;" required>
+                    <div class="pt-5 container">
+                        <div class="row">
+                            <form action="/addtopic/" width="50%" method="POST">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    <div class="pt-3 container">
+                                        <div class="pb-3 card">
+                                            <h5 class="card-header">Topics</h5>
+                                            <div class="card-body">
+                                                <h4></h4>
+                                                <div class="pb-4 container">
+                                                    <label for="topic">topic:</label>
+                                                    <input type="text" class="form-control" name="topic" id="topic" style="font-size: 18pt; height: 35px; width:250px;" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Create</button>
+                                                <a href="/topics/" class="btn btn-secondary">Go Back</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="#" class="btn btn-primary">Add</a>
-                                <a href="./landing.html" class="btn btn-secondary">Go Back</a>
-                            </div>
+                                <div class="col-md-4"></div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4"></div>
             </div>
         </div>
-
     </div>
 
 </body>

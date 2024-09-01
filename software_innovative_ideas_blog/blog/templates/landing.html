@@ -34,7 +34,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./topics.html">topics</a>
+                    <a class="nav-link" href="/topics/">topics</a>
                 </li>
 
                 <li class="nav-item">
@@ -62,12 +62,13 @@
 
         <div class="row">
             <div class="col-md-4">
-                <div class="pt-3 container">
+                <div class="pt-3 pb-4 container">
                     <div class="pb-3 card">
                         <div class="card-body">
                             <p id="topics"><b><u>Topics</u></b></p>
-                            <p><a href="" class="card-text">Test1</a></p>
-                            <p><a href="" class="card-text">Test2</a></p>
+                            {% for x in topics %}
+                            <p><a href="{{x.id}}" class="card-text">{{ x.topic }}</a></p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

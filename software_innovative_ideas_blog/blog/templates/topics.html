@@ -1,16 +1,19 @@
 ﻿<!DOCTYPE html>
 
+{% load static %}
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Software Innovative Ideas</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="..\scripts\jquery\dist\jquery.js"></script>
-    <link rel="stylesheet" href="..\scripts\bootstrap\dist\css\bootstrap.css">
-    <script src="..\scripts\bootstrap\dist\js\bootstrap.min.js"></script>
-    <link rel="stylesheet" href="..\scripts\bootstrap\dist\css\website\landing.css">
-    <script src="..\scripts\services\test.js"></script>
+    <script src="{% static '.\jquery\dist\jquery.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
+    <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
+    <script src="{% static '.\services\landing.js' %}"></script>
 </head>
 
 <body>
@@ -31,44 +34,45 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../topics.html">topics</a>
+                    <a class="nav-link" href="./topics.html">topics</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.html">logout</a>
+                    <a class="nav-link" href="/logout/">logout</a>
                 </li>
                 <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-    </li>-->
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>-->
             </ul>
         </div>
     </nav>
 
     <div class="pt-5 container">
-        <div class="row"> 
+        <div class="row">
             <div class="col-md-12">
                 <div class="pt-3 container">
                     <div class="pb-3 card">
                         <h5 class="card-header">Topics</h5>
                         <div class="card-body">
-                            <p><a href="" class="card-text">Test1</a></p>
-                            <p><a href="" class="card-text">Test2</a></p>
-                            <a href="./addtopic.html" class="btn btn-primary">Add</a>
-                            <a href="./landing.html" class="btn btn-secondary">Go back</a>
+                            {% for x in topics %}
+                            <p><a href="{{x.id}}" class="card-text">{{ x.topic }}</a></p>
+                            {% endfor %}
+                            <a href="/addtopic/" class="btn btn-primary">Add</a>
+                            <a href="/landing/" class="btn btn-secondary">Go back</a>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>

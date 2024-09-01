@@ -22,7 +22,7 @@ def add_idea_topic(model):
            if ideas_topics_entity.pk > 0:
             result["success"] = True
             result["result"] = user
-            result["Error"] = None
+            result["Error"] = []
            return result;
 
     except Exception as error:

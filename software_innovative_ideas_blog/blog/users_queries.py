@@ -16,7 +16,7 @@ def user_login_query(user):
 		else:
 			result["success"] = True
 			result["result"] = user_login_result
-			result["Error"] = None
+			result["Error"] = []
 		return result
 
 	except Exception as error:

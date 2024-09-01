@@ -5,12 +5,19 @@ from .models import Users
 from .forms import NameForm
 import sys
 from . import users_handlers
+from . import topics_handlers
 from . import users_queries
+from . import topics_queries
 from datetime import datetime
 
 def landing(request):
-  #users = Users.objects.all().values()
+  listtopicsqueryresult = topics_queries.list_topics_query();
   template = loader.get_template('landing.html')
+
+  if listtopicsqueryresult["success"] == True:
+    context = {"topics": listtopicsqueryresult["result"]}
+    return HttpResponse(template.render(context, request))
+
   context = { }
   return HttpResponse(template.render(context, request))
   
@@ -38,7 +45,7 @@ def login(request):
          return HttpResponseRedirect("/landing/")
         else:
          template = loader.get_template('login.html')
-         context = {"error":user_login_queryresult["error"][0]} 
+         context = {"error":user_login_queryresult["Error"][0]} 
          return HttpResponse(template.render(context, request))
 
     template = loader.get_template('login.html')
@@ -66,9 +73,45 @@ def createaccount(request):
          return HttpResponseRedirect("/login/")
         else:
             template = loader.get_template('createaccount.html')
-            context = {"error":adduserresult["error"][0]} 
+            context = {"error":adduserresult["Error"][0]} 
         return HttpResponse(template.render(context, request))
 
     template = loader.get_template('createaccount.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def topics(request):
+    
+    listtopicsqueryresult = topics_queries.list_topics_query();
+
+    if listtopicsqueryresult["success"] == True:
+        template = loader.get_template('topics.html')
+        context = {"topics": listtopicsqueryresult["result"]}
+        return HttpResponse(template.render(context, request))
+
+    template = loader.get_template('topics.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def addtopic(request):
+
+    if request.method == "POST":
+       
+        topic = {
+            "topic": request.POST.get("topic")
+        }
+        
+        addtopicresult = topics_handlers.add_topic(topic)
+        
+        print(addtopicresult)
+
+        if addtopicresult["success"] == True:
+         return HttpResponseRedirect("/topics/")
+        else:
+            template = loader.get_template('addtopic.html')
+            context = {"error":addtopicresult["Error"][0]} 
+        return HttpResponse(template.render(context, request))
+
+    template = loader.get_template('addtopic.html')
     context = {}
     return HttpResponse(template.render(context, request))
