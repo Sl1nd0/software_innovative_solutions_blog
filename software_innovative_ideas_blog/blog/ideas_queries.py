@@ -24,24 +24,3 @@ def user_login_query(user):
 			result["result"] = user
 			result["Error"].append(error)	
 	return result
-
-def get_user_by_id_query(user): 
-
-	result = {"success": False, "result": {}, "Error": []}
-
-	try:           
-		user_query_result = Users.objects.filter(id=user["id"]).values()
-	
-		if user_query_result is None:
-			return result
-		else:
-			result["success"] = True
-			result["result"] = user_query_result
-			result["Error"] = None
-		return result
-
-	except Exception as error:
-			result["success"] = False
-			result["result"] = user
-			result["Error"].append(error)	
-	return result

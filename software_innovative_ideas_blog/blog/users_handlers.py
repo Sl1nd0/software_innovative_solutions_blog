@@ -23,7 +23,7 @@ def add_user(user):
            return result;
 
     except Exception as error:
-            result["success"] = True
+            result["success"] = False
             result["result"] = user
             result["Error"].append(error)
     return result

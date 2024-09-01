@@ -13,3 +13,16 @@ class Users(models.Model):
 	password = models.CharField(max_length=255)
 	cell_number = models.CharField(max_length=80)
 	user_date = models.DateTimeField(max_length=50)
+
+class Ideas(models.Model):
+	userID = models.ForeignKey(Users, on_delete=models.CASCADE)
+	idea = models.TextField(default= '') 
+	idea_date = models.DateTimeField(max_length=50)
+
+class Topics(models.Model):
+	topic = models.CharField(max_length=255)
+	topic_date = models.DateTimeField(max_length=50)
+
+class IdeasTopics(models.Model):
+	ideaID = models.ForeignKey(Ideas, on_delete=models.CASCADE)
+	topicID = models.ForeignKey(Topics, on_delete=models.CASCADE)
