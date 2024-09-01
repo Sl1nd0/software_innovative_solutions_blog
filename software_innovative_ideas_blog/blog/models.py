@@ -26,3 +26,14 @@ class Topics(models.Model):
 class IdeasTopics(models.Model):
 	ideaID = models.ForeignKey(Ideas, on_delete=models.CASCADE)
 	topicID = models.ForeignKey(Topics, on_delete=models.CASCADE)
+
+class Likes(models.Model):
+	ideaID = models.ForeignKey(Ideas, on_delete=models.CASCADE)
+	userID = models.ForeignKey(Users, on_delete=models.CASCADE)
+	like_date = models.DateTimeField(max_length=50)
+
+class Comments(models.Model):
+	ideaID = models.ForeignKey(Ideas, on_delete=models.CASCADE)
+	userID = models.ForeignKey(Users, on_delete=models.CASCADE)
+	Comment = models.TextField(default= '')
+	comment_date = models.DateTimeField(max_length=50)
