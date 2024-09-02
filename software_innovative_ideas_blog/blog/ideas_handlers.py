@@ -7,7 +7,7 @@ from . import topics_queries
 
 def add_idea(idea): 
 
-    result = {"success": False, "result": None, "Error": []}
+    result = {"success": False, "result": None, "error": []}
 
     try:       
            user = users_queries.get_user_by_id_query(idea["userID"]);
@@ -21,7 +21,7 @@ def add_idea(idea):
            if user is None:
             result["success"] = False
             result["result"] = user
-            result["Error"] = "User doesn't exist for id {0}" .format(idea["userID"]))
+            result["error"] = "User doesn't exist for id {0}" .format(idea["userID"]))
            return result;
 
            date = datetime.now();
@@ -38,16 +38,16 @@ def add_idea(idea):
 
            ideas_topics_handlers_result = ideas_topics_handlers.add_idea_topic(model)
 
-           result["Error"].append(ideas_topics_handlers_result["Error"])
+           result["error"].append(ideas_topics_handlers_result["error"])
 
            if idea_entity.pk > 0:
             result["success"] = True
             result["result"] = user
-            result["Error"] = None
+            result["error"] = None
            return result;
 
     except Exception as error:
             result["success"] = False
             result["result"] = user
-            result["Error"].append(error)
+            result["error"].append(error)
     return result

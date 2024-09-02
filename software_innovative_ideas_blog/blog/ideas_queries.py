@@ -4,7 +4,7 @@ from datetime import datetime
 
 def user_login_query(user): 
 
-	result = {"success": False, "result": {}, "Error": []}
+	result = {"success": False, "result": {}, "error": []}
 
 	try:            
 		email = user['email']
@@ -16,11 +16,11 @@ def user_login_query(user):
 		else:
 			result["success"] = True
 			result["result"] = user_login_result
-			result["Error"] = None
+			result["error"] = None
 		return result
 
 	except Exception as error:
 			result["success"] = False
 			result["result"] = user
-			result["Error"].append(error)	
+			result["error"].append(error)	
 	return result

@@ -45,7 +45,7 @@ def login(request):
          return HttpResponseRedirect("/landing/")
         else:
          template = loader.get_template('login.html')
-         context = {"error":user_login_queryresult["Error"][0]} 
+         context = {"error":user_login_queryresult["error"][0]} 
          return HttpResponse(template.render(context, request))
 
     template = loader.get_template('login.html')
@@ -73,7 +73,7 @@ def createaccount(request):
          return HttpResponseRedirect("/login/")
         else:
             template = loader.get_template('createaccount.html')
-            context = {"error":adduserresult["Error"][0]} 
+            context = {"error":adduserresult["error"][0]} 
         return HttpResponse(template.render(context, request))
 
     template = loader.get_template('createaccount.html')
@@ -125,7 +125,7 @@ def addtopic(request):
          return HttpResponseRedirect("/topics/")
         else:
             template = loader.get_template('addtopic.html')
-            context = {"error":addtopicresult["Error"][0]} 
+            context = {"error":addtopicresult["error"][0]} 
         return HttpResponse(template.render(context, request))
 
     template = loader.get_template('addtopic.html')

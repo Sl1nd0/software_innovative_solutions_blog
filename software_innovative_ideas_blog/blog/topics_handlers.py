@@ -4,7 +4,7 @@ from datetime import datetime
 
 def add_topic(topic): 
 
-    result = {"success": False, "result": None, "Error": []}
+    result = {"success": False, "result": None, "error": []}
 
     try:
            date = datetime.now();
@@ -16,12 +16,12 @@ def add_topic(topic):
            if topic_entity.pk > 0:
             result["success"] = True
             result["result"] = topic
-            result["Error"] = []
+            result["error"] = []
            return result;
 
     except Exception as error:
             print(error)
             result["success"] = False
             result["result"] = topic
-            result["Error"].append(error)
+            result["error"].append(error)
     return result

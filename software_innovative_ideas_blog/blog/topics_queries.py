@@ -4,7 +4,7 @@ from datetime import datetime
 
 def list_topics_by_id_query(topic): 
 
-	result = {"success": False, "result": {}, "Error": []}
+	result = {"success": False, "result": {}, "error": []}
 
 	try: 
 
@@ -15,18 +15,18 @@ def list_topics_by_id_query(topic):
 		else:
 			result["success"] = True
 			result["result"] = list_topics_query_result
-			result["Error"] = []
+			result["error"] = []
 		return result
 
 	except Exception as error:
 			result["success"] = False
 			result["result"] = topic
-			result["Error"].append(error)	
+			result["error"].append(error)	
 	return result
 
 def get_topic_by_id_query(id): 
 
-	result = {"success": False, "result": {}, "Error": []}
+	result = {"success": False, "result": {}, "error": []}
 
 	try: 
 
@@ -39,18 +39,18 @@ def get_topic_by_id_query(id):
 		else:
 			result["success"] = True
 			result["result"] = get_topic_query_result
-			result["Error"] = []
+			result["error"] = []
 		return result
 
 	except Exception as error:
 			result["success"] = False
 			result["result"] = id
-			result["Error"].append(error)	
+			result["error"].append(error)	
 	return result
 
 def list_topics_query(): 
 
-	result = {"success": False, "result": {}, "Error": []}
+	result = {"success": False, "result": {}, "error": []}
 
 	try: 
 
@@ -61,11 +61,11 @@ def list_topics_query():
 		else:
 			result["success"] = True
 			result["result"] = list_topics_query_result
-			result["Error"] = []
+			result["error"] = []
 		return result
 
 	except Exception as error:
 			result["success"] = False
 			result["result"] = {}
-			result["Error"].append(error)	
+			result["error"].append(error)	
 	return result
