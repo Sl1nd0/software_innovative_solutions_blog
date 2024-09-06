@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\software_innovative_ideas_blog",
+    "\\software_innovative_ideas_blog\\blog"
   ],
+  "SelectedNode": "\\software_innovative_ideas_blog\\blog\\views.py",
   "PreviewInSolutionExplorer": false
 }
