@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 
+print("#models")
 # Create your models here.
 # Register your models here.
 class UserRoles(models.Model):	

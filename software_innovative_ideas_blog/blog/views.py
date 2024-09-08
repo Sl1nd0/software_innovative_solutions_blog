@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
 from .models import Users
-from .forms import NameForm
 import sys
 from . import users_handlers
 from . import topics_handlers

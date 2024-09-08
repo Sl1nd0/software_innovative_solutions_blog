@@ -1,14 +1,36 @@
+import django
+from django.conf import settings
+from django.db import connections, transaction
+from .models import UserRoles
+from . import users_roles_handlers_tests
+from . import users_handlers_tests
+from django.conf import settings
 from django.test import TestCase
+from django.core.management import call_command
 
-# Create your tests here.
-# Initialize an empty list to store errors
-errors = []
+def set_up_test_db():
+    
+    try:
+        new_db_settings = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+        }
 
-try:
-    # Code that may raise an exception
-    result = 1 / 0  # This will raise a ZeroDivisionError
-except Exception as error:
-    # Append the error to the list
-    errors.append(error)
+        settings.DATABASES['default'].update(new_db_settings)
+        print('In memory database setup complete')
 
-print("Errors:", errors[0])
+        # Apply all migrations
+        call_command('migrate', 'blog', interactive=False)              
+
+    except Exception as e:
+        print(f"Error running migrations: {e}")
+
+    #user_roles_handlers_tests unit tests    
+    users_roles_handlers_tests.add_user_role_success_test({"role": "test"}) 
+    users_roles_handlers_tests.add_user_role_fail_test({})
+    
+    #users_handlers_tests unit tests
+    users_handlers_tests.add_user_success_test({})
+    users_handlers_tests.add_user_fail_test({})
+
+set_up_test_db()
