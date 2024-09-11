@@ -65,7 +65,7 @@
                 <div class="col-md-8">
                     <div class="pt-5 container">
                         <div class="row">
-                            <form action="/edittopic/" width="50%" method="POST">
+                            <form action="/edittopic/{{topic.id}}" width="50%" method="POST">
                                 {% csrf_token %}
                                 <div class="col-md-12">
                                     <div class="pt-3 container">
@@ -75,7 +75,7 @@
                                                 <h4></h4>
                                                 <div class="pb-4 container">
                                                     <label for="topic">topic:</label>
-                                                    <input type="text" class="form-control" name="topic" id="topic" value="{{topic}}" style="font-size: 18pt; height: 35px; width:250px;" required>
+                                                    <input type="text" class="form-control" name="topic" id="topic" value="{{topic.topic}}" style="font-size: 18pt; height: 35px; width:250px;" required>
                                                 </div>
                                                 <button type="submit" class="btn btn-success">Edit</button>
                                                 <a href="/topics/" class="btn btn-secondary">Go Back</a>

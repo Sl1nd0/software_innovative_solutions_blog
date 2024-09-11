@@ -17,6 +17,7 @@
 </head>
 
 <body>
+    <input type="hidden" value={{userid}} name="id" placeholder=" " class="form-username form-control" id="form-id" Required>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Software Innovative Ideas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,12 +31,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./addpost.html">Post</a>
+                    <a class="nav-link" href="/addidea/{{userid}}">Post</a>
                 </li>
-
+                {% if role == "administrator" %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/topics/">topics</a>
+                    <a class="nav-link" href="/topics/{{userid}}">topics</a>
                 </li>
+                {% endif %}
 
                 <li class="nav-item">
                     <a class="nav-link" href="/logout/">logout</a>
@@ -67,7 +69,7 @@
                         <div class="card-body">
                             <p id="topics"><b><u>Topics</u></b></p>
                             {% for x in topics %}
-                            <p><a href="{{x.id}}" class="card-text">{{ x.topic }}</a></p>
+                            <p><a href="{{x.id}}" class="card-text">{{x.topic}}</a></p>
                             {% endfor %}
                         </div>
                     </div>
@@ -76,35 +78,24 @@
 
             <div class="col-md-8">
                 {% if error != None%}
-                <div style="background-color:blue">Hello</div>
+                <div style="background-color:blue">{{error}}</div>
                 {% endif %}
+
+                {% for x in ideas %}
                 <div class="pt-3 container">
                     <div class="pb-3 card">
-                        <h5 class="card-header"><a href="#">Silindokuhle Nkabinde</a></h5>
+                        <h5 class="card-header"><a href="{{x.userID}}">{{x.name}} {{x.surname}}</a></h5>
                         <div class="card-body">
-                            <p id="topics"><b>Topic</b></p>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <p id="topics"><b>{{x.topic}}</b></p>
+                            <p class="card-text">{{x.idea}}</p>
                             <a href="#" class="btn btn-primary" onclick="">Like</a>
                             <a href="./addcomment.html" class="btn btn-success">Comment</a>
-                            <a href="./listlikes.html">5 likes</a>
-                            <a href="./listcomments.html">5 comments</a>
+                            <a href="./listlikes.html">{{x.likes}} likes</a>
+                            <a href="./listcomments.html">{{x.comments}} comments</a>
                         </div>
                     </div>
                 </div>
-
-                <div class="pt-3 container">
-                    <div class="card">
-                        <h5 class="card-header"><a href="#">TestUser</a></h5>
-                        <div class="card-body">
-                            <p id="topics"><b>Topic</b></p>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary" onclick="">Like</a>
-                            <a href="./addcomment.html" class="btn btn-success">Comment</a>
-                            <a href="./listlikes.html">6 likes</a>
-                            <a href="./listcomments.html">20 comments</a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}                 
             </div>
         </div>
     </div>

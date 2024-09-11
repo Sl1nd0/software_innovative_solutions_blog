@@ -19,10 +19,13 @@ def add_user_role(role):
             result["success"] = True
             result["result"] = UserRoles.objects.filter(role=role["role"]).values()
             result["error"] = []
-           return result;
+            return result
+           return result
 
     except Exception as error:
-            result["success"] = False
-            result["result"] = role
-            result["error"].append(error)
+           print("add_user_role error")
+           print(error)
+           result["success"] = False
+           result["result"] = role
+           result["error"].append(error)
     return result

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿ <!DOCTYPE html>
 
 {% load static %}
 
@@ -20,6 +20,9 @@
 
     <div class="container">
         <div class="row">
+            {% if error != None%}
+            <div style="background-color:blue">{{error}}</div>
+            {% endif %}
             <div class="col-md-14">
                 <div class="jumbotron">
                     <center><h1>Software Innovative Ideas</h1></center> <!--For demo purposes-->
