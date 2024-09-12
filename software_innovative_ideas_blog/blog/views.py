@@ -14,6 +14,7 @@ from . import likes_handlers
 from . import comments_handlers
 from . import user_roles_seed
 from . import comments_queries
+from . import likes_queries
 from datetime import datetime
 
 def landing(request):
@@ -21,7 +22,8 @@ def landing(request):
   template = loader.get_template('landing.html')
   
   listtopicsqueryresult = topics_queries.list_topics_query();
-
+  print("listtopicsqueryresult[result]")
+  print(listtopicsqueryresult["result"])
   if listtopicsqueryresult["success"] == True:
     context["topics"] = listtopicsqueryresult["result"]
 
@@ -32,7 +34,8 @@ def landing(request):
     "user_name": request.POST.get("user_name"),
     "password": request.POST.get("password"),
     }
-
+    print("user")
+    print(user)
     user_login_queryresult = users_queries.user_login_query(user)
     
     if user_login_queryresult["success"] == False:
@@ -267,7 +270,8 @@ def addcomment(request, userid):
         comment_dto = {
             "idea": request.POST.get("idea"),
             "ideaID": request.POST.get("ideaID"),
-            "userID": userid
+            "userID": userid,
+            "authorID": request.POST.get("userID")
         }
         
         list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
@@ -275,11 +279,18 @@ def addcomment(request, userid):
         all_comments = []
 
         for comment in list_comments_queries["result"]:
+            
+            user = Users.objects.filter(id=comment["userID_id"]).first()
+
+            if user == None: 
+             continue
+
             all_comments.append({
                 "comment": comment["Comment"],
                 "date": comment["comment_date"],
-                "name": "Test",
-                "surname": "Test"
+                "name": user.name,
+                "surname": user.surname,
+                "userID": user.id
             })
 
         print("list_comments_queries[result]")
@@ -289,9 +300,17 @@ def addcomment(request, userid):
         print("comment_dto")
         print(comment_dto)
 
+        author = None
+
+        author_query_result = Users.objects.filter(id=comment_dto["authorID"]).first();
+        if author_query_result != None:
+         author = author_query_result.name + " " + author_query_result.surname;
+
         context["idea"] = comment_dto["idea"];
         context["ideaID"] = comment_dto["ideaID"];
         context["userid"] = userid;
+        context["author"] = author;
+        context["userID"] = comment_dto["authorID"];
         return HttpResponse(template.render(context, request))
 
     return HttpResponse(template.render(context, request))
@@ -307,38 +326,52 @@ def comment(request, userid):
         comment_dto = {
             "idea": request.POST.get("idea"),
             "ideaID": request.POST.get("ideaID"),
-            "userID": userid,
+            "userID": userid, 
+            "authorID": request.POST.get("userID"),
             "comment":request.POST.get("form_comment")
         }
-         
-        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
-
-        all_comments = []
-
-        for comment in list_comments_queries["result"]:
-            all_comments.append({
-                "comment": comment["Comment"],
-                "date": comment["comment_date"],
-                "name": "Test",
-                "surname": "Test"
-            })
-
-        print("list_comments_queries[result]")
-        print(list_comments_queries["result"])
-        context["comments"] = all_comments
-
+               
         print("comment_dto")
         print(comment_dto)
 
         add_comment_result = comments_handlers.add_comment(comment_dto)
         print(add_comment_result["result"])
 
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
+
+        all_comments = []
+
+        for comment in list_comments_queries["result"]:
+            user = Users.objects.filter(id=comment["userID_id"]).first()
+
+            if user == None:
+                continue
+
+            all_comments.append({
+                "comment": comment["Comment"],
+                "date": comment["comment_date"],
+                "name": user.name,
+                "surname": user.surname
+            })
+
+        print("list_comments_queries[result]")
+        print(list_comments_queries["result"])
+        context["comments"] = all_comments
+
+        author = None
+        author_query_result = Users.objects.filter(id=comment_dto["authorID"]).first();
+
+        if author_query_result != None:
+         author = author_query_result.name+ " " + author_query_result.surname;
+
         context["idea"] = comment_dto["idea"];
         context["ideaID"] = comment_dto["ideaID"];
         context["userid"] = userid;
-        return HttpResponseRedirect("/addcomment/"+str(userid))
+        context["author"] = author
+        context["userID"] = comment_dto["authorID"];
 
-    return HttpResponseRedirect("/addcomment/"+str(userid))
+        return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(context, request))
 
 #likes
 def addlike(request, userid):
@@ -362,3 +395,56 @@ def addlike(request, userid):
         return HttpResponseRedirect("/landing/"+str(userid))
                     
     return HttpResponseRedirect("/landing/"+str(userid))
+
+def likes(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
+    context["userid"] = userid;
+
+    template = loader.get_template('listlikes.html')
+
+    if request.method == "POST":
+         
+        likes_dto = {
+            "idea": request.POST.get("idea"),
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid,
+            "authorID":request.POST.get("userID"),
+            "comment":request.POST.get("form_comment")
+        }
+             
+        print("likes_dto")
+        print(likes_dto)
+
+        list_likes_queries = likes_queries.list_likes_by_idea_query(likes_dto["ideaID"])
+
+        all_likes = []
+
+        for like in list_likes_queries["result"]:
+            user = Users.objects.filter(id=like["userID_id"]).first()
+
+            if user == None:
+                continue
+
+            all_likes.append({
+                "date": like["like_date"],
+                "name": user.name,
+                "surname": user.surname
+            })
+
+        print(list_likes_queries["result"])
+        context["likes"] = all_likes
+        
+        author = None
+
+        author_query_result = Users.objects.filter(id=likes_dto["authorID"]).first();
+        
+        if author_query_result != None:
+         author = author_query_result.name+ " " + author_query_result.surname;
+
+        context["idea"] = likes_dto["idea"];
+        context["ideaID"] = likes_dto["ideaID"];
+        context["userid"] = userid;
+        context["author"] = author;
+
+        return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(context, request))

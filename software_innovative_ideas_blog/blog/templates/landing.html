@@ -99,17 +99,32 @@
                                 <form action="/addcomment/{{userid}}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" value={{x.ideaID}} name="ideaID" placeholder=" " class="form-username form-control" id="form-id" Required>
-                                    <input type="hidden" value={{userid}} name="userid" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <input type="hidden" value={{x.userID}} name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
                                     <input type="hidden" value={{x.idea}} name="idea" placeholder=" " class="form-username form-control" id="form-id" Required>
                                     <button type="submit" class="btn btn-success">Comment</button>
                                 </form>&nbsp;
-                                <a href="./listlikes.html">{{x.likes}} likes</a>&nbsp;
-                                <a href="./listcomments.html">{{x.comments}} comments</a>
+
+                                <form id="listlikes" action="/likes/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                    <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                    <a href="#" onclick="gotoListLikes({{ x }}, {{userid}})">{{x.likes}} likes</a>&nbsp;
+                                </form>
+
+                                <form id="listcomments" action="/addcomment/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                    <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+
+                                    <a href="#" onclick="gotoListComments({{ x }}, {{userid}})">{{x.comments}} comments</a>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}                 
+                {% endfor %}
             </div>
         </div>
     </div>

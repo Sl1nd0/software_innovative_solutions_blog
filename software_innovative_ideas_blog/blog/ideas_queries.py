@@ -64,28 +64,24 @@ def get_ideas_and_topics_query(user):
 			return result
 
 		print(idea_topic_query_result[0])
+		my_topic = None
 
-		my_topic = idea_topic_query_result.filter(ideaID = my_idea["id"]).first()
-
-		my_likes = Likes.objects.filter(ideaID = my_idea["id"]).count()
-
-		print("my_likes")
-		print(my_likes)
-
-		my_comments = Comments.objects.filter(ideaID = my_idea["id"]).count();
-		print("my_comments")
-		print(my_comments)
-
-		ideas.append({
-			"name": my_user_details["name"],
-			"surname": my_user_details["surname"],
-			"userID": my_user_details["id"],
-			"idea": my_idea["idea"],
-			"ideaID": my_idea["id"],
-			"topic": Topics.objects.filter(id=my_topic['topicID_id']).values().first()["topic"],
-			"likes": my_likes,
-			"comments": my_comments
-		})
+		if my_idea != None:
+		  my_topic = idea_topic_query_result.filter(ideaID = my_idea["id"]).first()
+		  my_likes = Likes.objects.filter(ideaID = my_idea["id"]).count()
+		  my_comments = Comments.objects.filter(ideaID = my_idea["id"]).count();
+		  
+		if my_topic != None:
+			ideas.append({
+				"name": my_user_details["name"],
+				"surname": my_user_details["surname"],
+				"userID": my_user_details["id"],
+				"idea": my_idea["idea"],
+				"ideaID": my_idea["id"],
+				"topic": Topics.objects.filter(id=my_topic['topicID_id']).values().first()["topic"],
+				"likes": my_likes,
+				"comments": my_comments
+			})
 
 		for idea in idea_query_result:			
 			current_topic = idea_topic_query_result.filter(ideaID = idea["id"]).first()
@@ -93,18 +89,20 @@ def get_ideas_and_topics_query(user):
 			comments = Comments.objects.filter(ideaID = idea["id"]).count();
 
 			print("comments")
-			print(comments)
+			print(idea["id"])
+			print(current_topic)
 
-			ideas.append({
-			"name":other_user_details.filter(id=idea["userID_id"]).first()["name"],
-			"surname": other_user_details.filter(id=idea["userID_id"]).first()["surname"],
-			"userID": idea["userID_id"],
-			"idea": idea["idea"],
-			"ideaID": idea["id"],
-			"topic": Topics.objects.filter(id=current_topic['topicID_id']).values().first()["topic"],
-			"likes": likes,
-			"comments": comments
-			})
+			if current_topic != None:
+				ideas.append({
+				"name":other_user_details.filter(id=idea["userID_id"]).first()["name"],
+				"surname": other_user_details.filter(id=idea["userID_id"]).first()["surname"],
+				"userID": idea["userID_id"],
+				"idea": idea["idea"],
+				"ideaID": idea["id"],
+				"topic": Topics.objects.filter(id=current_topic['topicID_id']).values().first()["topic"],
+				"likes": likes,
+				"comments": comments
+				})
 		
 		distinct_ideas = list(map(dict, set(frozenset(d.items()) for d in ideas)))
 

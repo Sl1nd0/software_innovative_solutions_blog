@@ -8,6 +8,7 @@ urlpatterns = [
     path('addcomment/<int:userid>', views.addcomment, name='addcomment'),
     path('comment/<int:userid>', views.comment, name='addcomment'),
     path('addlike/<int:userid>', views.addlike, name='addlike'),
+    path('likes/<int:userid>', views.likes, name='likes'),
     path('topics/<int:userid>', views.topics, name='topics'),
     path('edittopic/<int:id>', views.edittopic, name='edittopic'),
     path('deletetopic/<int:id>', views.deletetopic, name='deletetopic'),

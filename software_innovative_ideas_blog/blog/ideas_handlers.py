@@ -47,7 +47,7 @@ def add_idea(idea):
            #link idea and topic
            model = {
                "ideaID":  idea_entity,
-               "topicID": Topics.object.filter(id = idea["topicID"]).first()
+               "topicID": Topics.objects.filter(id = idea["topicID"]).first()
            }
 
            ideas_topics_handlers_result = ideas_topics_handlers.add_idea_topic(model)

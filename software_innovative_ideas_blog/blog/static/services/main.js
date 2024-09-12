@@ -1,3 +1,4 @@
+
 //async function logout() {
 //    try {
 //        const response = await red("/login/");
@@ -9,7 +10,6 @@
 //    }
 //}
 
-
 //function addComment(userid, ideaid, idea) {
 //   //alert(userid + " " + ideaid + " " + idea)
 //    let dto = {
@@ -18,4 +18,30 @@
 //        "idea":idea
 //    }
 //}
+
+function gotoListLikes(test, userid) {
+    document.getElementById('ideaID').value = test.ideaID;
+    document.getElementById('idea').value = test.idea; 
+    document.getElementById('userID').value = test.userID;
+
+    var form = document.getElementById('listlikes');
+    form.appendChild(document.getElementById('ideaID'))
+    form.appendChild(document.getElementById('userID'))
+    form.appendChild(document.getElementById('idea'))
+
+    form.submit();
+}
+
+function gotoListComments(test, userid) {
+    document.getElementById('ideaID').value = test.ideaID;
+    document.getElementById('idea').value = test.idea;
+    document.getElementById('userID').value = test.userID;
+
+    var form = document.getElementById('listcomments');
+    form.appendChild(document.getElementById('ideaID'))
+    form.appendChild(document.getElementById('userID'))
+    form.appendChild(document.getElementById('idea'))
+
+    form.submit();
+}
 
