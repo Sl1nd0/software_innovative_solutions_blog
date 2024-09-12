@@ -10,7 +10,10 @@ from . import user_roles_queries
 from . import topics_queries
 from . import ideas_queries
 from . import ideas_handlers
+from . import likes_handlers
+from . import comments_handlers
 from . import user_roles_seed
+from . import comments_queries
 from datetime import datetime
 
 def landing(request):
@@ -251,3 +254,111 @@ def addidea(request, userid):
      context["topics"] = listtopicsqueryresult["result"]
     
     return HttpResponse(template.render(context, request))
+
+#comments
+def addcomment(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": "", "comments": ""}
+    context["userid"] = userid;
+     
+    template = loader.get_template('addcomment.html')
+
+    if request.method == "POST":
+
+        comment_dto = {
+            "idea": request.POST.get("idea"),
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid
+        }
+        
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
+
+        all_comments = []
+
+        for comment in list_comments_queries["result"]:
+            all_comments.append({
+                "comment": comment["Comment"],
+                "date": comment["comment_date"],
+                "name": "Test",
+                "surname": "Test"
+            })
+
+        print("list_comments_queries[result]")
+        print(list_comments_queries["result"])
+        context["comments"] = all_comments
+
+        print("comment_dto")
+        print(comment_dto)
+
+        context["idea"] = comment_dto["idea"];
+        context["ideaID"] = comment_dto["ideaID"];
+        context["userid"] = userid;
+        return HttpResponse(template.render(context, request))
+
+    return HttpResponse(template.render(context, request))
+
+def comment(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
+    context["userid"] = userid;
+
+    template = loader.get_template('addcomment.html')
+
+    if request.method == "POST":
+            
+        comment_dto = {
+            "idea": request.POST.get("idea"),
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid,
+            "comment":request.POST.get("form_comment")
+        }
+         
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
+
+        all_comments = []
+
+        for comment in list_comments_queries["result"]:
+            all_comments.append({
+                "comment": comment["Comment"],
+                "date": comment["comment_date"],
+                "name": "Test",
+                "surname": "Test"
+            })
+
+        print("list_comments_queries[result]")
+        print(list_comments_queries["result"])
+        context["comments"] = all_comments
+
+        print("comment_dto")
+        print(comment_dto)
+
+        add_comment_result = comments_handlers.add_comment(comment_dto)
+        print(add_comment_result["result"])
+
+        context["idea"] = comment_dto["idea"];
+        context["ideaID"] = comment_dto["ideaID"];
+        context["userid"] = userid;
+        return HttpResponseRedirect("/addcomment/"+str(userid))
+
+    return HttpResponseRedirect("/addcomment/"+str(userid))
+
+#likes
+def addlike(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": ""}
+    context["userid"] = userid;
+
+    template = loader.get_template('addlike.html')
+
+    if request.method == "POST":
+        like_dto = {
+            "idea": request.POST.get("idea"),
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid
+        }
+        print("like_dto")
+        print(like_dto)
+        like_result = likes_handlers.add_like(like_dto)
+        print("like_result")
+        print(like_result["error"])
+        print(like_result["result"])
+        return HttpResponseRedirect("/landing/"+str(userid))
+                    
+    return HttpResponseRedirect("/landing/"+str(userid))

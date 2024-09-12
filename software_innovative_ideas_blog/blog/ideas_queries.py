@@ -81,6 +81,7 @@ def get_ideas_and_topics_query(user):
 			"surname": my_user_details["surname"],
 			"userID": my_user_details["id"],
 			"idea": my_idea["idea"],
+			"ideaID": my_idea["id"],
 			"topic": Topics.objects.filter(id=my_topic['topicID_id']).values().first()["topic"],
 			"likes": my_likes,
 			"comments": my_comments
@@ -99,14 +100,17 @@ def get_ideas_and_topics_query(user):
 			"surname": other_user_details.filter(id=idea["userID_id"]).first()["surname"],
 			"userID": idea["userID_id"],
 			"idea": idea["idea"],
+			"ideaID": idea["id"],
 			"topic": Topics.objects.filter(id=current_topic['topicID_id']).values().first()["topic"],
 			"likes": likes,
 			"comments": comments
 			})
 		
-		if len(ideas) > 0:
+		distinct_ideas = list(map(dict, set(frozenset(d.items()) for d in ideas)))
+
+		if len(distinct_ideas) > 0:
 			result["success"] = True
-			result["result"] = ideas
+			result["result"] = distinct_ideas
 			return result
 		return result
 

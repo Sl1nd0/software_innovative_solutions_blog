@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
     <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
-    <script src="{% static '.\services\landing.js' %}"></script>
+    <script src="{% static '.\services\main.js' %}"></script>
 </head>
 
 <body>
@@ -88,10 +88,24 @@
                         <div class="card-body">
                             <p id="topics"><b>{{x.topic}}</b></p>
                             <p class="card-text">{{x.idea}}</p>
-                            <a href="#" class="btn btn-primary" onclick="">Like</a>
-                            <a href="./addcomment.html" class="btn btn-success">Comment</a>
-                            <a href="./listlikes.html">{{x.likes}} likes</a>
-                            <a href="./listcomments.html">{{x.comments}} comments</a>
+                            <div class="row">
+                                <form action="/addlike/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value={{x.ideaID}} name="ideaID" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <input type="hidden" value={{userid}} name="userid" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <input type="hidden" value={{x.idea}} name="idea" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <button type="submit" class="btn btn-primary">like</button>
+                                </form>&nbsp;
+                                <form action="/addcomment/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value={{x.ideaID}} name="ideaID" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <input type="hidden" value={{userid}} name="userid" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <input type="hidden" value={{x.idea}} name="idea" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                    <button type="submit" class="btn btn-success">Comment</button>
+                                </form>&nbsp;
+                                <a href="./listlikes.html">{{x.likes}} likes</a>&nbsp;
+                                <a href="./listcomments.html">{{x.comments}} comments</a>
+                            </div>
                         </div>
                     </div>
                 </div>
