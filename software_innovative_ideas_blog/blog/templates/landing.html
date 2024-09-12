@@ -82,8 +82,9 @@
                 {% endif %}
 
                 {% for x in ideas %}
-                <div class="pt-3 container">
-                    <div class="pb-3 card">
+
+                <div class="pt-3 pb-4 container">
+                    <div class="pb-2 card">
                         <h5 class="card-header"><a href="{{x.userID}}">{{x.name}} {{x.surname}}</a></h5>
                         <div class="card-body">
                             <p id="topics"><b>{{x.topic}}</b></p>
@@ -119,7 +120,29 @@
                                     <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
 
                                     <a href="#" onclick="gotoListComments({{ x }}, {{userid}})">{{x.comments}} comments</a>
+                                </form>  
+                                {% if x.canEdit == 1 %}
+                                &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                                <form id="editidea" action="/editidea/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                    <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                    <input type="hidden" value="" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                    <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+
+                                    <a href="#" onclick="editPost({{ x }}, '{{x.topic}}', {{userid}})">Edit Post</a>
+                                </form>&nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                                <form id="deleteidea" action="/deleteidea/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                    <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                    <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+
+                                    <a href="#" onclick="deletePost({{x}}, '{{x.topic}}', '{{x.topicID}}', {{userid}})">Delete Post</a>
                                 </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

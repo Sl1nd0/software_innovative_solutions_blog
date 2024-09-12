@@ -77,8 +77,10 @@ def get_ideas_and_topics_query(user):
 				"surname": my_user_details["surname"],
 				"userID": my_user_details["id"],
 				"idea": my_idea["idea"],
+				"canEdit": 1,
 				"ideaID": my_idea["id"],
 				"topic": Topics.objects.filter(id=my_topic['topicID_id']).values().first()["topic"],
+				"topicID": my_topic['topicID_id'],
 				"likes": my_likes,
 				"comments": my_comments
 			})
@@ -92,14 +94,32 @@ def get_ideas_and_topics_query(user):
 			print(idea["id"])
 			print(current_topic)
 
+			if my_user_details != None:
+				if my_user_details["id"] == idea["userID_id"]:
+					ideas.append({
+					"name":other_user_details.filter(id=idea["userID_id"]).first()["name"],
+					"surname": other_user_details.filter(id=idea["userID_id"]).first()["surname"],
+					"userID": idea["userID_id"],
+					"idea": idea["idea"],
+					"canEdit": 1,
+					"ideaID": idea["id"],
+					"topic": Topics.objects.filter(id=current_topic['topicID_id']).values().first()["topic"],
+					"topicID": current_topic['topicID_id'],
+					"likes": likes,
+					"comments": comments
+					})
+					continue
+
 			if current_topic != None:
 				ideas.append({
 				"name":other_user_details.filter(id=idea["userID_id"]).first()["name"],
 				"surname": other_user_details.filter(id=idea["userID_id"]).first()["surname"],
 				"userID": idea["userID_id"],
 				"idea": idea["idea"],
+				"canEdit": 0,
 				"ideaID": idea["id"],
 				"topic": Topics.objects.filter(id=current_topic['topicID_id']).values().first()["topic"],
+				"topicID": current_topic['topicID_id'],
 				"likes": likes,
 				"comments": comments
 				})

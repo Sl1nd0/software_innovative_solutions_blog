@@ -80,6 +80,98 @@ def main_landing(request, id):
   
   return HttpResponse(template.render(context, request))
 
+def edit_post_update(request, userid):
+    
+    template = loader.get_template('editidea.html')
+    context = { }
+    print(userid)
+
+    if request.method == "POST":
+
+     idea = {
+        "idea": request.POST.get("idea"),
+        "ideaID": request.POST.get("ideaID"),
+        "topicID": request.POST.get("topic"),
+        "userid": userid,
+     }
+
+     print("edit_post_update")
+     print("idea")
+     print(idea)
+    
+    return HttpResponse(template.render(context, request))  
+    
+def edit_post(request, userid):
+    template = loader.get_template('editidea.html')
+    context = { }
+
+    listtopicsqueryresult = topics_queries.list_topics_query();
+    print("listtopicsqueryresult[result]")
+    print(listtopicsqueryresult["result"])
+    if listtopicsqueryresult["success"] == True:
+     context["topics"] = listtopicsqueryresult["result"]
+
+    if request.method == "POST":
+
+     idea = {
+        "idea": request.POST.get("idea"),
+        "ideaID": request.POST.get("ideaID"),
+        "topic": request.POST.get("topic"),
+        "topicID": request.POST.get("topicID"),
+        "userid": userid,
+     }
+
+     print("edit_post")
+     print(idea)
+
+     my_user_details = Users.objects.all().filter(id = idea["userid"]).first()
+     author = None
+
+     if my_user_details == None:
+      context["error"].append("User doesn't exist for userid {0}" .format(idea["userid"]))
+      author = my_user_details["name"] + " " + my_user_details["surname"];
+      
+     context["userid"] = idea["userid"]
+     context["ideaID"] = idea["ideaID"]
+     context["idea"] = idea["idea"]
+     context["currenttopic"] = idea["topic"]
+     context["currenttopicID"] = idea["topicID"]
+     context["author"] = author
+
+     return HttpResponse(template.render(context, request))  
+    return HttpResponse(template.render(context, request))
+
+def delete_post(request, userid):
+    template = loader.get_template('deleteidea.html')
+    context = { }
+
+    if request.method == "POST":
+
+     idea = {
+        "idea": request.POST.get("idea"),
+        "ideaID": request.POST.get("ideaID"),
+        "topic": request.POST.get("topic"), 
+        "userid": userid,
+     }
+
+     print("delete_post")
+
+     my_user_details = Users.objects.all().filter(id = idea["userid"]).first()
+     author = None
+
+     if my_user_details == None:
+      context["error"].append("User doesn't exist for userid {0}" .format(idea["userid"]))
+      author = my_user_details["name"] + " " + my_user_details["surname"];
+      
+     context["userid"] = idea["userid"]
+     context["ideaID"] = idea["ideaID"]
+     context["idea"] = idea["idea"]
+     context["currenttopic"] = idea["topic"]
+     context["author"] = author
+
+     return HttpResponse(template.render(context, request))  
+    return HttpResponse(template.render(context, request))
+
 def main(request):
   template = loader.get_template('index.html')
   context = { }

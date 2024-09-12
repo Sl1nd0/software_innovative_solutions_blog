@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Software Innovative Ideas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static '.\jquery\dist\jquery.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
+    <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
+    <script src="{% static '.\services\editidea.js' %}"></script>
+</head>
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="./landing.html">Software Innovative Ideas</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="./myprofile.html">Silindokuhle Nkabinde<span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./addpost.html">Post</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./topics.html">topics</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.html">logout</a>
+                </li>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="pt-5 container">
+        <input type="hidden" value={{userid}} name="id" placeholder=" " class="form-username form-control" id="form-id" Required>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                    <div class="pt-3 container">
+                        <div class="pb-3 card">
+                            <h5 class="card-header">Edit Idea</h5>
+                            <div class="card-body">
+                                <form action="/editideaupdate/{{userid}}" id="editidea" name="editidea" width="50%" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ideaID}}" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="{{currenttopicID}}" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+                                    <input type="hidden" value="{{currenttopicID}}" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+
+                                    <div class="btn-group pb-3">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            Select Topic
+                                        </button>
+
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            {% for topic in topics %}
+                                            <button class="dropdown-item" onclick="setTopic('{{topic.topic}}', '{{topic.id}}')" type="button">{{topic.topic}}</button>
+                                            {% endfor %}
+                                        </div>
+                                    </div><br>
+                                    <p id="selectedtopic">{{currenttopic}}</p>
+
+                                    <div class="pb-4 container">
+                                        <input type="hidden" name="topic" id="topic" class="form-username form-control" Required>
+                                        <textarea class="form-control" rows="5" name="idea" id="idea">{{idea}}</textarea>
+                                    </div>
+                                    <a onclick="editIdea('{{ideaID}}', '{{currenttopicID}}', '{{userid}}')" class="btn btn-success">Save</a>
+                                    <a href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

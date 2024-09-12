@@ -19,6 +19,12 @@
 //    }
 //}
 
+function setTopic(topic, topicID) {
+    document.getElementById("selectedtopic").innerText = topic
+    document.getElementById("topic").value = topicID;
+    return topic
+}
+
 function gotoListLikes(test, userid) {
     document.getElementById('ideaID').value = test.ideaID;
     document.getElementById('idea').value = test.idea; 
@@ -45,3 +51,30 @@ function gotoListComments(test, userid) {
     form.submit();
 }
 
+function editPost(idea, topic, userid)
+{
+    document.getElementById('ideaID').value = idea.ideaID;
+    document.getElementById('idea').value = idea.idea;
+    document.getElementById('topic').value = topic;
+    document.getElementById('topicID').value = idea.topicID;
+
+    var form = document.getElementById('editidea');
+    form.appendChild(document.getElementById('ideaID'))
+    form.appendChild(document.getElementById('idea'))
+    form.appendChild(document.getElementById('topic'))
+
+    form.submit();
+}
+
+function deletePost(idea, topic, userid) {
+    document.getElementById('ideaID').value = idea.ideaID;
+    document.getElementById('idea').value = idea.idea;
+    document.getElementById('topic').value = topic;
+
+    var form = document.getElementById('deleteidea');
+    form.appendChild(document.getElementById('ideaID'))
+    form.appendChild(document.getElementById('idea'))
+    form.appendChild(document.getElementById('topic'))
+
+    form.submit();
+}
