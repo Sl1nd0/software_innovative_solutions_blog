@@ -16,11 +16,12 @@ from . import comments_handlers
 from . import user_roles_seed
 from . import comments_queries
 from . import likes_queries
+from . import user_role_helper
 from datetime import datetime
 from django.urls import reverse
 from urllib.parse import urlencode
 
-def landing(request):
+def landing(request):  
   context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
   template = loader.get_template('landing.html')
   
@@ -63,7 +64,7 @@ def landing(request):
   
 #main_landing
 def main_landing(request, userid):
-  print("request.POST.get(topicID)")
+
   topicID = 0
   if request.method == "POST":
     print("request.POST.get(topicID)")
@@ -93,7 +94,7 @@ def main_landing(request, userid):
     print(get_user_by_id_queryresult)
     context["userid"] = get_user_by_id_queryresult["result"]["id"]
     context["ideas"] = [item for item in ideas_queries_result["result"] if item["topicID"] == topicID] if topicID > 0 else ideas_queries_result["result"]
-    context["role"] = role_query_result["result"]["role"]
+    context["role"] = user_role_helper.get_user_role(userid)
 
     return HttpResponse(template.render(context, request))
   
@@ -125,6 +126,7 @@ def edit_post_update(request, userid):
         context["error"] = edit_idea_result["error"]
         context["idea"] = idea["idea"]
         context["ideaID"] = idea["ideaID"]
+        context["role"] = user_role_helper.get_user_role(userid)
         context["topicID"] = idea["topicID"]
         context["currenttopic"] = idea["currenttopic"]
         context["userid"] = idea["userid"]
@@ -167,6 +169,7 @@ def edit_post(request, userid):
      context["ideaID"] = idea["ideaID"]
      context["idea"] = idea["idea"]
      context["currenttopic"] = idea["topic"]
+     context["role"] = user_role_helper.get_user_role(userid)
      context["currenttopicID"] = idea["topicID"]
      context["author"] = author
 
@@ -200,6 +203,7 @@ def delete_post(request, userid):
      context["ideaID"] = idea["ideaID"]
      context["idea"] = idea["idea"]
      context["currenttopic"] = idea["topic"]
+     context["role"] = user_role_helper.get_user_role(userid)
      context["currenttopicID"] = idea["topicID"]
      context["author"] = author
      return HttpResponse(template.render(context, request))
@@ -233,6 +237,7 @@ def delete_post_update(request, userid):
         context["idea"] = idea["idea"]
         context["ideaID"] = idea["ideaID"]
         context["topicID"] = idea["topicID"]
+        context["role"] = user_role_helper.get_user_role(userid)
         context["currenttopic"] = idea["currenttopic"]
         context["userid"] = idea["userid"]
         return HttpResponse(template.render(context, request))     
@@ -317,10 +322,12 @@ def topics(request, userid):
     if listtopicsqueryresult["success"] == True:
         template = loader.get_template('topics.html')
         context = {"topics": listtopicsqueryresult["result"], "userid": userid}
+        context["role"] = user_role_helper.get_user_role(userid)
         return HttpResponse(template.render(context, request))
 
     template = loader.get_template('topics.html')
     context = {"userid": userid}
+    context["role"] = user_role_helper.get_user_role(userid)
     return HttpResponse(template.render(context, request))
     
 def edittopic(request, id, userid):
@@ -348,6 +355,7 @@ def edittopic(request, id, userid):
     
     template = loader.get_template('edittopic.html')   
     context = {"topic": topic["result"], "userid": userid, "id": id}
+    context["role"] = user_role_helper.get_user_role(userid)
     print(context)
     return HttpResponse(template.render(context, request))
     
@@ -367,6 +375,7 @@ def deletetopic(request, id, userid):
     
     template = loader.get_template('deletetopic.html')
     context = {"topic": topic["result"], "userid": userid, "id": id}
+    context["role"] = user_role_helper.get_user_role(userid)
     print(context)
     return HttpResponse(template.render(context, request))
 
@@ -392,6 +401,7 @@ def addtopic(request, userid):
     template = loader.get_template('addtopic.html')
     context = {}
     context["userid"] = userid
+    context["role"] = user_role_helper.get_user_role(userid)
     return HttpResponse(template.render(context, request))
 
 ###POSTS ideas
@@ -422,14 +432,15 @@ def addidea(request, userid):
 
     if listtopicsqueryresult["success"] == True: 
      context["topics"] = listtopicsqueryresult["result"]
-    
+     context["role"] = user_role_helper.get_user_role(userid)
     return HttpResponse(template.render(context, request))
 
 #comments
 def addcomment(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": "", "comments": ""}
     context["userid"] = userid;
-     
+    context["role"] = user_role_helper.get_user_role(userid)
+
     template = loader.get_template('addcomment.html')
 
     if request.method == "POST":
@@ -488,6 +499,7 @@ def addcomment(request, userid):
 def comment(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
     context["userid"] = userid;
+    context["role"] = user_role_helper.get_user_role(userid)
 
     template = loader.get_template('addcomment.html')
 
@@ -548,6 +560,7 @@ def comment(request, userid):
 def editcomment(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
     context["userid"] = userid;
+    context["role"] = user_role_helper.get_user_role(userid)
 
     template = loader.get_template('editcomment.html')
     #I need comment id
@@ -588,7 +601,7 @@ def editcomment(request, userid):
         context["surname"] =  users_queries_result["result"]["surname"];
         context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
         context["userID"] = userid;
-        
+        context["role"] = user_role_helper.get_user_role(userid)
         print("context[commentID]")
         
         print(context["commentID"])
@@ -660,7 +673,7 @@ def editcommentupdate(request, userid):
         context["userid"] = userid;
         context["author"] = author;
         context["userID"] = comment_dto["authorID"];
-
+        context["role"] = user_role_helper.get_user_role(userid)
         return HttpResponse(template.render(context, request))
 
      return HttpResponseRedirect("/landing/"+str(userid))
@@ -712,7 +725,7 @@ def deletecomment(request, userid):
         context["surname"] =  users_queries_result["result"]["surname"];
         context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
         context["userID"] = userid;
-
+        context["role"] = user_role_helper.get_user_role(userid)
         return HttpResponse(template.render(context, request))
     return HttpResponseRedirect("/landing/"+str(userid))
 
@@ -783,7 +796,7 @@ def deletecommentupdate(request, userid):
         context["userid"] = userid;
         context["author"] = author;
         context["userID"] = comment_dto["authorID"];
-
+        context["role"] = user_role_helper.get_user_role(userid)
         return HttpResponse(template.render(context, request))
 
      return HttpResponseRedirect("/landing/"+str(userid))
@@ -792,7 +805,7 @@ def deletecommentupdate(request, userid):
 def addlike(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": ""}
     context["userid"] = userid;
-
+    context["role"] = user_role_helper.get_user_role(userid)
     template = loader.get_template('addlike.html')
 
     if request.method == "POST":
@@ -860,6 +873,6 @@ def likes(request, userid):
         context["ideaID"] = likes_dto["ideaID"];
         context["userid"] = userid;
         context["author"] = author;
-
+        context["role"] = user_role_helper.get_user_role(userid)
         return HttpResponse(template.render(context, request))
     return HttpResponse(template.render(context, request))
