@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
     <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
-    <script src="{% static '.\services\addcomment.js' %}"></script>
+    <script src="{% static '.\services\editcomment.js' %}"></script>
 </head>
 
 <body id="content">
@@ -72,17 +72,25 @@
                             <h5 class="card-header"><a href="#">{{author}}</a></h5>
                             <div class="card-body">
                                 <h4></h4>
-
                                 <div class="pb-4 container">
                                     <div class="row pb-2">
                                         <h5 class="card-text">{{idea}}</h5>
                                     </div><br />
                                     <div class="row"><h5>{{name}} {{surname}}</h5></div>
                                     <label for="comment"><b>Edit Comment:</b></label>
-                                    <textarea class="form-control" rows="5" name="comment" id="comment">{{comment}}</textarea>
+                                    <textarea class="form-control" rows="5" name="new_comment" id="new_comment">{{comment}}</textarea>
                                 </div>
-                                <a onclick=" " class="btn btn-success">Save</a>
-                                <a onclick=" " href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
+
+                                <form id="editcomment" action="/editcommentupdate/{{userid}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                    <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
+                                    <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
+                                    <input type="hidden" value="" name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
+                                    <a onclick="editComment('{{idea}}',{{ideaID}},{{userid}},'{{commentID}}')" class="btn btn-success">Save</a>
+                                    <a onclick=" " href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
+                                </form>                               
                             </div>
                         </div>
                     </div>

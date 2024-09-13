@@ -81,7 +81,6 @@
                                     <div>
                                         <div class="row"> <h5>{{x.name}} {{x.surname}}</h5></div>
                                         <div class="row pb-4">
-
                                             <p>{{x.comment}}</p>
                                             {% if x.canEdit == 1 %}
                                             &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
@@ -90,7 +89,8 @@
                                                 <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                                 <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
                                                 <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
-                                                <a href="#" onclick="editComment({{ideaID}},{{userid}},'{{x.comment}}')">Edit Comment</a>
+                                                <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
+                                                <a href="#" onclick="editComment({{ideaID}},{{userid}},'{{x.comment}}', {{x.commentID}})">Edit Comment</a>
                                             </form>&nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <form id="deletecomment" action="/deletecomment/{{userid}}" method="post">

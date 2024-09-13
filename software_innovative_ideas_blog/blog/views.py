@@ -11,11 +11,14 @@ from . import topics_queries
 from . import ideas_queries
 from . import ideas_handlers
 from . import likes_handlers
+from .models import IdeasTopics
 from . import comments_handlers
 from . import user_roles_seed
 from . import comments_queries
 from . import likes_queries
 from datetime import datetime
+from django.urls import reverse
+from urllib.parse import urlencode
 
 def landing(request):
   context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
@@ -445,6 +448,7 @@ def addcomment(request, userid):
 
             all_comments.append({
                 "comment": comment["Comment"],
+                "commentID": comment["commentID"],
                 "date": comment["comment_date"],
                 "name": user.name,
                 "surname": user.surname,
@@ -508,6 +512,7 @@ def comment(request, userid):
 
             all_comments.append({
                 "comment": comment["Comment"],
+                "commentID": comment["commentID"],
                 "date": comment["comment_date"],
                 "canEdit": comment["canEdit"],
                 "name": user.name,
@@ -538,12 +543,13 @@ def editcomment(request, userid):
     context["userid"] = userid;
 
     template = loader.get_template('editcomment.html')
-
+    #I need comment id
     if request.method == "POST":
         comment_dto = {
             "ideaID": request.POST.get("ideaID"),
             "userID": userid,
             "comment":  request.POST.get("comment"),
+            "commentID":  request.POST.get("commentID"),
         }
         print("comment_dto")
         print(comment_dto)
@@ -570,17 +576,87 @@ def editcomment(request, userid):
         context["userid"] = userid;
         context["userid"] = userid;
         context["comment"] = comment_dto["comment"];
+        context["commentID"] = comment_dto["commentID"];
         context["name"] =  users_queries_result["result"]["name"];
         context["surname"] =  users_queries_result["result"]["surname"];
         context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
         context["userID"] = userid;
+        
+        print("context[commentID]")
+        
+        print(context["commentID"])
 
         return HttpResponse(template.render(context, request))
     return HttpResponseRedirect("/landing/"+str(userid))
 
 def editcommentupdate(request, userid):
- 
- return True
+    
+     if request.method == "POST":
+        context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": "", "comments": ""}
+        context["userid"] = userid;
+        template = loader.get_template('addcomment.html')    
+        
+        comment_dto = {
+        "ideaID": request.POST.get("ideaID"),
+        "userID": userid, 
+        "authorID": request.POST.get("userID"),
+        "comment":request.POST.get("comment"),
+        "commentID":request.POST.get("commentID")
+        }
+
+        print("comment_dto")
+        print(comment_dto)
+        edit_comment_result = comments_handlers.edit_comment({"comment": comment_dto["comment"], "commentID": comment_dto["commentID"]})
+        
+        #get the topic and topicID
+        ideas_topics_query_result = IdeasTopics.objects.filter(ideaID = comment_dto["ideaID"]).first()
+
+        print(ideas_topics_query_result.topicID.topic)
+
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
+
+        all_comments = []
+
+        for comment in list_comments_queries["result"]:
+            print("comment[userID_id]")
+            print(comment)
+            user = Users.objects.filter(id=comment["userID_id"]).first()
+
+            if user == None: 
+             continue
+
+            all_comments.append({
+                "comment": comment["Comment"],
+                "commentID": comment["commentID"],
+                "date": comment["comment_date"],
+                "name": user.name,
+                "surname": user.surname,
+                "canEdit":comment["canEdit"],
+                "userID": user.id
+            })
+
+        print("list_comments_queries[result]")
+        print(list_comments_queries["result"])
+        context["comments"] = all_comments
+
+        print("comment_dto")
+        print(comment_dto)
+
+        author = None
+
+        author_query_result = Users.objects.filter(id=comment_dto["authorID"]).first();
+        if author_query_result != None:
+         author = author_query_result.name + " " + author_query_result.surname;
+
+        context["idea"] = ideas_topics_query_result.ideaID.idea;
+        context["ideaID"] = comment_dto["ideaID"];
+        context["userid"] = userid;
+        context["author"] = author;
+        context["userID"] = comment_dto["authorID"];
+
+        return HttpResponse(template.render(context, request))
+
+     return HttpResponseRedirect("/landing/"+str(userid))
 
 def deletecomment(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
@@ -588,6 +664,7 @@ def deletecomment(request, userid):
 
     template = loader.get_template('deletecomment.html')
 
+    #I need comment id
     if request.method == "POST":
         comment_dto = {
             "ideaID": request.POST.get("ideaID"),
@@ -608,22 +685,22 @@ def deletecomment(request, userid):
           print(ideas_queries_result["error"])
           return HttpResponseRedirect("/landing/"+str(userid))
         
-         return HttpResponseRedirect("/landing/"+str(userid))
+          return HttpResponseRedirect("/landing/"+str(userid))
 
-        print("ideas_queries_result[result]")
-        print(ideas_queries_result["result"])
+          print("ideas_queries_result[result]")
+          print(ideas_queries_result["result"])
 
-        context["idea"] = ideas_queries_result["result"].idea;
-        context["ideaID"] = ideas_queries_result["result"].id;
-        context["userid"] = userid;
-        context["userid"] = userid;
-        context["comment"] = comment_dto["comment"];
-        context["name"] =  users_queries_result["result"]["name"];
-        context["surname"] =  users_queries_result["result"]["surname"];
-        context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
-        context["userID"] = userid;
+          context["idea"] = ideas_queries_result["result"].idea;
+          context["ideaID"] = ideas_queries_result["result"].id;
+          context["userid"] = userid;
+          context["userid"] = userid;
+          context["comment"] = comment_dto["comment"];
+          context["name"] =  users_queries_result["result"]["name"];
+          context["surname"] =  users_queries_result["result"]["surname"];
+          context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
+          context["userID"] = userid;
 
-        return HttpResponse(template.render(context, request))
+          return HttpResponse(template.render(context, request))
     return HttpResponseRedirect("/landing/"+str(userid))
 
 def deletecommentupdate(request, userid):

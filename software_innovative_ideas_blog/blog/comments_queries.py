@@ -41,6 +41,7 @@ def list_comments_by_idea_query(idea):
 			'canEdit': canedit,
 			'userID_id': comment["userID_id"], 
 			'Comment': comment["Comment"],
+			'commentID': comment["id"],
 			'comment_date': comment["comment_date"]
 			})
 
