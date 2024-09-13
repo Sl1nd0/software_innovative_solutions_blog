@@ -63,7 +63,14 @@ def landing(request):
   
 #main_landing
 def main_landing(request, userid):
-  
+  print("request.POST.get(topicID)")
+  topicID = 0
+  if request.method == "POST":
+    print("request.POST.get(topicID)")
+    print(request.POST.get("topicID"))
+    topicID = int(request.POST.get("topicID"))
+    print("request.POST.get(topicID)")
+
   context = {"topics":"", "userid": "", "ideas": []}
   template = loader.get_template('landing.html')
 
@@ -78,14 +85,14 @@ def main_landing(request, userid):
 
     get_user_by_id_queryresult = users_queries.get_user_by_id_query(user)
     ideas_queries_result = ideas_queries.get_ideas_and_topics_query({"userID": get_user_by_id_queryresult["result"]["id"]})
-
+     
     role_query_result = user_roles_queries.get_user_role_by_id_query(get_user_by_id_queryresult["result"]["User_roleID_id"])
     print(role_query_result)    
 
     print(ideas_queries_result["result"])
     print(get_user_by_id_queryresult)
     context["userid"] = get_user_by_id_queryresult["result"]["id"]
-    context["ideas"] = ideas_queries_result["result"]
+    context["ideas"] = [item for item in ideas_queries_result["result"] if item["topicID"] == topicID] if topicID > 0 else ideas_queries_result["result"]
     context["role"] = role_query_result["result"]["role"]
 
     return HttpResponse(template.render(context, request))

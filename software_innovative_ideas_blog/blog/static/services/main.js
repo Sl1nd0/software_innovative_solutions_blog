@@ -25,6 +25,14 @@ function setTopic(topic, topicID) {
     return topic
 }
 
+function filterByTopic(topicID) {
+    document.getElementById('topicID').value = topicID
+    var form = document.getElementById('filterbytopic');
+    form.appendChild(document.getElementById('topicID'))
+
+    form.submit();
+}
+
 function gotoListLikes(test, userid) {
     document.getElementById('ideaID').value = test.ideaID;
     document.getElementById('idea').value = test.idea; 

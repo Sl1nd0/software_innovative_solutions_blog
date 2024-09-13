@@ -69,8 +69,19 @@
                         <div class="card-body">
                             <p id="topics"><b><u>Topics</u></b></p>
                             {% for x in topics %}
-                            <p><a href="{{x.id}}" class="card-text">{{x.topic}}</a></p>
+                            <form id="filterbytopic" action="/landing/{{userid}}" method="post">
+                                {% csrf_token %}
+
+                                <input type="hidden" value="" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                <p><a href="#" onclick="filterByTopic('{{x.id}}')">{{x.topic}}</a></p>
+                            </form>
                             {% endfor %}
+                            <form id="filterbytopic" action="/landing/{{userid}}" method="post">
+                                {% csrf_token %}
+
+                                <input type="hidden" value="" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                <p><a href="#" onclick="filterByTopic('0')">all</a></p>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -119,7 +130,7 @@
                                     <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
 
                                     <a href="#" onclick="gotoListComments({{ x }}, {{userid}})">{{x.comments}} comments</a>
-                                </form>  
+                                </form>
                                 {% if x.canEdit == 1 %}
                                 &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
                                 <form id="editidea" action="/editidea/{{userid}}" method="post">
