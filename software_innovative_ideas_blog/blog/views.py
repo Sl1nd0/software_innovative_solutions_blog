@@ -659,53 +659,127 @@ def editcommentupdate(request, userid):
      return HttpResponseRedirect("/landing/"+str(userid))
 
 def deletecomment(request, userid):
-    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
-    context["userid"] = userid;
-
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}    
     template = loader.get_template('deletecomment.html')
 
     #I need comment id
     if request.method == "POST":
         comment_dto = {
-            "ideaID": request.POST.get("ideaID"),
+           "ideaID": request.POST.get("ideaID"),
             "userID": userid,
             "comment":  request.POST.get("comment"),
+            "commentID":  request.POST.get("commentID"),
         }
-        print("comment_dto")
+
+        print("deletecomment comment_dto")
         print(comment_dto)
 
         ideas_queries_result = ideas_queries.get_idea_by_id_query(comment_dto["ideaID"])
-        
+        print("ideas_queries_result")
+        print(ideas_queries_result)
+
         if ideas_queries_result["success"] == False:
          print(ideas_queries_result["error"])
-         return HttpResponseRedirect("/landing/"+str(userid))
+         #return HttpResponseRedirect("/landing/"+str(userid))
         
-         users_queries_result = users_queries.get_user_by_id_query({"id": userid})
-         if ideas_queries_result["success"] == False:
-          print(ideas_queries_result["error"])
-          return HttpResponseRedirect("/landing/"+str(userid))
-        
-          return HttpResponseRedirect("/landing/"+str(userid))
+        users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+        print("users_queries_result[result]")
+        print(users_queries_result["result"])
 
-          print("ideas_queries_result[result]")
-          print(ideas_queries_result["result"])
+        if users_queries_result["success"] == False:
+         print("users_queries_result[result]")
+         print(users_queries_result["result"])
+         print(users_queries_result["error"])
+          #return HttpResponseRedirect("/landing/"+str(userid))
 
-          context["idea"] = ideas_queries_result["result"].idea;
-          context["ideaID"] = ideas_queries_result["result"].id;
-          context["userid"] = userid;
-          context["userid"] = userid;
-          context["comment"] = comment_dto["comment"];
-          context["name"] =  users_queries_result["result"]["name"];
-          context["surname"] =  users_queries_result["result"]["surname"];
-          context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
-          context["userID"] = userid;
+         print("ideas_queries_result[result]")
+         print(ideas_queries_result["result"])
 
-          return HttpResponse(template.render(context, request))
+         context["idea"] = ideas_queries_result["result"].idea;
+        context["ideaID"] = ideas_queries_result["result"].id;
+        context["userid"] = userid;
+        context["userid"] = userid;
+        context["comment"] = comment_dto["comment"];
+        context["commentID"] = comment_dto["commentID"];
+        context["name"] =  users_queries_result["result"]["name"];
+        context["surname"] =  users_queries_result["result"]["surname"];
+        context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
+        context["userID"] = userid;
+
+        return HttpResponse(template.render(context, request))
     return HttpResponseRedirect("/landing/"+str(userid))
 
 def deletecommentupdate(request, userid):
- 
- return True
+    
+     if request.method == "POST":
+        context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": "", "comments": ""}
+        context["userid"] = userid;
+        template = loader.get_template('addcomment.html')    
+        
+        comment_dto = {
+        "ideaID": request.POST.get("ideaID"),
+        "userID": userid, 
+        "authorID": request.POST.get("userID"),
+        "comment":request.POST.get("comment"),
+        "commentID":request.POST.get("commentID")
+        }
+
+        print("comment_dto")
+        print(comment_dto)
+        #delete the comment
+        delete_comment_result = comments_handlers.delete_comment({"commentID": comment_dto["commentID"]})
+        print("delete_comment_result ")
+        print(delete_comment_result)
+
+        #get the topic and topicID
+        ideas_topics_query_result = IdeasTopics.objects.filter(ideaID = comment_dto["ideaID"]).first()
+
+        print(ideas_topics_query_result.topicID.topic)
+
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
+
+        all_comments = []
+
+        for comment in list_comments_queries["result"]:
+            print("comment[userID_id]")
+            print(comment)
+            user = Users.objects.filter(id=comment["userID_id"]).first()
+
+            if user == None: 
+             continue
+
+            all_comments.append({
+                "comment": comment["Comment"],
+                "commentID": comment["commentID"],
+                "date": comment["comment_date"],
+                "name": user.name,
+                "surname": user.surname,
+                "canEdit":comment["canEdit"],
+                "userID": user.id
+            })
+
+        print("list_comments_queries[result]")
+        print(list_comments_queries["result"])
+        context["comments"] = all_comments
+
+        print("comment_dto")
+        print(comment_dto)
+
+        author = None
+
+        author_query_result = Users.objects.filter(id=comment_dto["authorID"]).first();
+        if author_query_result != None:
+         author = author_query_result.name + " " + author_query_result.surname;
+
+        context["idea"] = ideas_topics_query_result.ideaID.idea;
+        context["ideaID"] = comment_dto["ideaID"];
+        context["userid"] = userid;
+        context["author"] = author;
+        context["userID"] = comment_dto["authorID"];
+
+        return HttpResponse(template.render(context, request))
+
+     return HttpResponseRedirect("/landing/"+str(userid))
 
 #likes
 def addlike(request, userid):

@@ -89,3 +89,34 @@ def edit_comment(comment_dto):
            result["result"] = comment_dto
            result["error"].append(error)
     return result
+
+
+def delete_comment(comment_dto):     
+
+    result = {"success": False, "result": None, "error": []}
+    
+    try:     
+          print(comment_dto)
+
+          comments_entity = Comments.objects.get(id=comment_dto["commentID"])
+
+          if comments_entity == None:
+           result["success"] = False
+           result["result"] = comment_dto
+           result["error"].append("Comment doesn't exist for comment ID {0}" .format(comment_dto["commentID"]))
+           return result
+
+          comments_entity.delete()
+
+          result["success"] = True
+          result["result"] = {}
+          result["error"] = []
+          return result
+
+    except Exception as error:
+           print("edit_comment error")
+           print(error)
+           result["success"] = False
+           result["result"] = comment_dto
+           result["error"].append(error)
+    return result
