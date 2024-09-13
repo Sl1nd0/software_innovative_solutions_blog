@@ -85,24 +85,20 @@
                                             <p>{{x.comment}}</p>
                                             {% if x.canEdit == 1 %}
                                             &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <form id="editidea" action="/editcomment/{{userid}}" method="post">
+                                            <form id="editcomment" action="/editcomment/{{userid}}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                                 <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
-                                                <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
-                                                <input type="hidden" value="" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
-                                                <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
-
-                                                <a href="#" onclick="editPost({{ x }}, '{{x.topic}}', {{userid}})">Edit Comment</a>
+                                                <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
+                                                <a href="#" onclick="editComment({{ideaID}},{{userid}},'{{x.comment}}')">Edit Comment</a>
                                             </form>&nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <form id="deleteidea" action="/deletecomment/{{userid}}" method="post">
+
+                                            <form id="deletecomment" action="/deletecomment/{{userid}}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                                 <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
-                                                <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
-                                                <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
 
-                                                <a href="#" onclick="deletePost({{x}}, '{{x.topic}}', '{{x.topicID}}', {{userid}})">Delete Comment</a>
+                                                <a href="#" onclick="deleteComment({{ideaID}},{{userid}},'{{x.comment}}')">Delete Comment</a>
                                             </form>
                                             {% endif %}
                                         </div>

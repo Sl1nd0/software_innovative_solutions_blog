@@ -8,20 +8,18 @@ from .models import Comments
 from .models import IdeasTopics
 from datetime import datetime
 
-def user_login_query(user): 
+def get_idea_by_id_query(id): 
 
 	result = {"success": False, "result": {}, "error": []}
 
 	try:            
-		email = user['email']
-		password = user['password']
-		user_login_result = Users.objects.filter(username=email, password=password).values()
+		idea_query_result = Ideas.objects.filter(id=id).first()
 	
-		if user_login_result is None:
+		if idea_query_result is None:
 			return result
 		else:
 			result["success"] = True
-			result["result"] = user_login_result
+			result["result"] = idea_query_result
 			result["error"] = None
 			return result
 
@@ -29,7 +27,7 @@ def user_login_query(user):
 
 	except Exception as error:
 			result["success"] = False
-			result["result"] = user
+			result["result"] = {}
 			result["error"].append(error)	
 	return result
 

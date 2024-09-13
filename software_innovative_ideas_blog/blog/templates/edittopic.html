@@ -67,7 +67,6 @@
                 <div class="col-md-8">
                     <div class="pt-5 container">
                         <div class="row">
-                            {{userid}}
                             <form action="/edittopic/{{topic.id}}/{{userid}}" width="50%" method="POST">
                                 {% csrf_token %}
                                 <div class="col-md-12">

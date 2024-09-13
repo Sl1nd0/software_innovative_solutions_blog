@@ -361,7 +361,7 @@ def deletetopic(request, id, userid):
     return HttpResponse(template.render(context, request))
 
 def addtopic(request, userid):
-
+    
     if request.method == "POST":
        
         topic = {
@@ -532,6 +532,90 @@ def comment(request, userid):
 
         return HttpResponse(template.render(context, request))
     return HttpResponse(template.render(context, request))
+
+def editcomment(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
+    context["userid"] = userid;
+
+    template = loader.get_template('editcomment.html')
+
+    if request.method == "POST":
+        comment_dto = {
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid,
+            "comment":  request.POST.get("comment"),
+        }
+        print("comment_dto")
+        print(comment_dto)
+
+        #get the idea
+        #get the comment
+        #return details to edit comment view
+
+        ideas_queries_result = ideas_queries.get_idea_by_id_query(comment_dto["ideaID"])
+        users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+
+        print("ideas_queries_result[result]")
+        print(ideas_queries_result["result"])
+
+        context["idea"] = ideas_queries_result["result"].idea;
+        context["ideaID"] = ideas_queries_result["result"].id;
+        context["userid"] = userid;
+        context["userid"] = userid;
+        context["comment"] = comment_dto["comment"];
+        context["name"] =  users_queries_result["result"]["name"];
+        context["surname"] =  users_queries_result["result"]["surname"];
+        context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
+        context["userID"] = userid;
+
+        return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect("/landing/"+str(userid))
+
+def editcommentupdate(request, userid):
+ 
+ return True
+
+def deletecomment(request, userid):
+    context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}
+    context["userid"] = userid;
+
+    template = loader.get_template('deletecomment.html')
+
+    if request.method == "POST":
+        comment_dto = {
+            "ideaID": request.POST.get("ideaID"),
+            "userID": userid,
+            "comment":  request.POST.get("comment"),
+        }
+        print("comment_dto")
+        print(comment_dto)
+
+        #get the idea
+        #get the comment
+        #return details to edit comment view
+
+        ideas_queries_result = ideas_queries.get_idea_by_id_query(comment_dto["ideaID"])
+        users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+
+        print("ideas_queries_result[result]")
+        print(ideas_queries_result["result"])
+
+        context["idea"] = ideas_queries_result["result"].idea;
+        context["ideaID"] = ideas_queries_result["result"].id;
+        context["userid"] = userid;
+        context["userid"] = userid;
+        context["comment"] = comment_dto["comment"];
+        context["name"] =  users_queries_result["result"]["name"];
+        context["surname"] =  users_queries_result["result"]["surname"];
+        context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
+        context["userID"] = userid;
+
+        return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect("/landing/"+str(userid))
+
+def deletecommentupdate(request, userid):
+ 
+ return True
 
 #likes
 def addlike(request, userid):
