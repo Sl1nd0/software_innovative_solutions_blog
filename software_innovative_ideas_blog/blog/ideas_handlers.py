@@ -86,7 +86,7 @@ def edit_idea(idea):
     result = {"success": False, "result": None, "error": []}
 
     try:    
-           topic = Topics.objects.filter(id = idea["topicID"]).first()
+           topic = Topics.objects.get(id = idea["topicID"])
 
            if topic is None:
             result["success"] = False
@@ -96,13 +96,28 @@ def edit_idea(idea):
 
            date = datetime.now();
 
-           idea_entity = Ideas.objects.get(id=idea["ideaID"])
+           idea_entity = Ideas.objects.get(id = idea["ideaID"])
            
-           if idea_entity != None:
-            idea_entity.topicID = topic
-            idea_entity.idea = idea["idea"]
-            idea_entity.save()
+           if idea_entity == None:
+            result["success"] = False
+            result["result"] = idea
+            result["error"].append("Idea doesn't exist for idea id {0}'" .format(idea["ideaID"]))
+            return result;
 
+           ideas_topics_entity = IdeasTopics.objects.get(ideaID=idea["ideaID"])
+           
+           if ideas_topics_entity == None:
+            result["success"] = False
+            result["result"] = idea
+            result["error"].append("IdeaTopic record doesn't exist for idea id {0}'" .format(idea["ideaID"]))
+            return result;
+
+           idea_entity.idea = idea["idea"]
+           idea_entity.save()
+
+           ideas_topics_entity.topicID = topic
+           ideas_topics_entity.save()
+           
            if idea_entity.idea == idea["idea"]:
             result["success"] = True
             result["result"] = idea_entity
