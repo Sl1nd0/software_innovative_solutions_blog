@@ -67,20 +67,49 @@
             <div class="col-md-12">
                 <div class="col-md-4"></div>
                 <div class="col-md-8">
-                    <div class="pt-3 container">
+                    <div class="pb-4 pt-3 container">
                         <div class="pb-3 card">
                             <h5 class="card-header"><a href="#">{{author}}</a></h5>
                             <div class="card-body">
                                 <h4></h4>
-                                <p class="card-text">{{idea}}</p>
+                               
                                 <div class="pb-4 container">
-                                    <label for="comment"><b>Add Comment:</b></label>
+                                    <div class="row pb-2">
+                                        <h5 class="card-text">{{idea}}</h5>
+                                    </div><br/>
                                     {% for x in comments %}
                                     <div>
-                                        <h5>{{x.name}} {{x.surname}} </h5>
-                                        <p>{{x.comment}}</p>
+                                        <div class="row"> <h5>{{x.name}} {{x.surname}}</h5></div>
+                                        <div class="row pb-4">
+
+                                            <p>{{x.comment}}</p>
+                                            {% if x.canEdit == 1 %}
+                                            &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <form id="editidea" action="/editcomment/{{userid}}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                                <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                                <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                                <input type="hidden" value="" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                                <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+
+                                                <a href="#" onclick="editPost({{ x }}, '{{x.topic}}', {{userid}})">Edit Comment</a>
+                                            </form>&nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <form id="deleteidea" action="/deletecomment/{{userid}}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                                <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                                <input type="hidden" value="" name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                                <input type="hidden" value="" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+
+                                                <a href="#" onclick="deletePost({{x}}, '{{x.topic}}', '{{x.topicID}}', {{userid}})">Delete Comment</a>
+                                            </form>
+                                            {% endif %}
+                                        </div>
+
                                     </div>
                                     {% endfor %}
+                                    <label for="comment"><b>Add Comment:</b></label>
                                     <textarea class="form-control" rows="5" name="comment" id="comment"></textarea>
                                 </div>
                                 <div class="row">
