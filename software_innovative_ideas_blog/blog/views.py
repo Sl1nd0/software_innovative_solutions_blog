@@ -437,7 +437,7 @@ def addcomment(request, userid):
 
         for comment in list_comments_queries["result"]:
             print("comment[userID_id]")
-            print(list_comments_queries["result"])
+            print(comment)
             user = Users.objects.filter(id=comment["userID_id"]).first()
 
             if user == None: 

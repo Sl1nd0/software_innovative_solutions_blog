@@ -28,24 +28,25 @@ def list_comments_by_idea_query(idea):
 			'comment_date': datetime.now()
 			}
 
+		#idea["userID
+		print("idea[userID]")
+		print(idea["userID"])
 		for comment in comments_result:
-		 if comment['userID_id'] == int(idea["userID"]):
-			 comment_dto['id'] = comment["id"]
-			 comment_dto['ideaID_id'] = comment["ideaID_id"];
-			 comment_dto['canEdit'] = 1;
-			 comment_dto['userID_id'] = comment["userID_id"];
-			 comment_dto['Comment'] = comment["Comment"];
-			 comment_dto['comment_date'] = comment["comment_date"];
-			 comments.append(comment_dto)
-			 continue		 
-		 comment_dto['id'] = comment["id"];
-		 comment_dto['ideaID_id'] = comment["ideaID_id"];
-		 comment_dto['canEdit'] = 0;
-		 comment_dto['userID_id'] = comment["userID_id"];
-		 comment_dto['Comment'] = comment["Comment"];
-		 comment_dto['comment_date'] = comment["comment_date"];
+		 canedit = 0;
+		 if comment['userID_id'] == idea["userID"]:
+		  canedit = 1;
+
+		 comments.append({'id': comment["id"], 
+			'ideaID_id': comment["ideaID_id"],
+			'canEdit': canedit,
+			'userID_id': comment["userID_id"], 
+			'Comment': comment["Comment"],
+			'comment_date': comment["comment_date"]
+			})
+
 		 print("comment_dto ")
 		 print(comment_dto)
+
 		 comments.append(comment_dto)
 
 		if comments_result is None:

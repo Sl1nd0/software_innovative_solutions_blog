@@ -15,7 +15,7 @@ def add_comment(comment_dto):
            date = datetime.now();
 
            user = Users.objects.filter(id=comment_dto["userID"]).first()
-           print("#user")
+           print("#add_comment user")
            print(user)
 
            if user is None:
@@ -25,7 +25,7 @@ def add_comment(comment_dto):
             return result
 
            idea = Ideas.objects.filter(id=comment_dto["ideaID"]).first()
-           print("#idea")
+           print("#add_comment idea")
            print(idea)
 
            if idea is None:
@@ -38,7 +38,7 @@ def add_comment(comment_dto):
            
            comments_entity.save()
 
-           print("#comments_entity")
+           print("#add_comment comments_entity")
            print(comments_entity)
 
            if comments_entity.pk > 0:
