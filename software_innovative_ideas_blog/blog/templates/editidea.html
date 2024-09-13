@@ -75,6 +75,7 @@
                                     <input type="hidden" value="{{ideaID}}" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                     <input type="hidden" value="{{currenttopicID}}" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
                                     <input type="hidden" value="{{currenttopicID}}" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                    <input type="hidden" value="{{currenttopic}}" name="currenttopic" placeholder=" " class="form-username form-control" id="currenttopic" Required>
 
                                     <div class="btn-group pb-3">
                                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -93,7 +94,7 @@
                                         <input type="hidden" name="topic" id="topic" class="form-username form-control" Required>
                                         <textarea class="form-control" rows="5" name="idea" id="idea">{{idea}}</textarea>
                                     </div>
-                                    <a onclick="editIdea('{{ideaID}}', '{{currenttopicID}}', '{{userid}}')" class="btn btn-success">Save</a>
+                                    <a onclick="editIdea('{{ideaID}}', '{{currenttopicID}}', '{{userid}}', '{{currenttopic}}')" class="btn btn-success">Save</a>
                                     <a href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
                                 </form>
                             </div>

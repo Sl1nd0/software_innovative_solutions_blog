@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\bootstrap.css' %}">
     <link rel="stylesheet" href="{% static '.\bootstrap\dist\css\website\landing.css' %}">
     <script src="{% static '.\bootstrap\dist\js\bootstrap.min.js' %}"></script>
-    <script src="{% static '.\services\addidea.js' %}"></script>
+    <script src="{% static '.\services\deleteidea.js' %}"></script>
 </head>
 
 
@@ -70,9 +70,14 @@
                         <div class="pb-3 card">
                             <h5 class="card-header">Edit Idea</h5>
                             <div class="card-body">
-                                <form action="/editidea/{{userid}}" name="addidea" width="50%" method="POST">
+                                <form action="/deleteideaupdate/{{userid}}" name="deleteidea" id="deleteidea" width="50%" method="POST">
                                     {% csrf_token %}
-                                    <div class="btn-group pb-3"> 
+                                    <input type="hidden" value="{{ideaID}}" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                    <input type="hidden" value="{{currenttopicID}}" name="topic" placeholder=" " class="form-username form-control" id="topic" Required>
+                                    <input type="hidden" value="{{currenttopicID}}" name="topicID" placeholder=" " class="form-username form-control" id="topicID" Required>
+                                    <input type="hidden" value="{{currenttopic}}" name="currenttopic" placeholder=" " class="form-username form-control" id="currenttopic" Required>
+
+                                    <div class="btn-group pb-3">
                                         <div class="dropdown-menu dropdown-menu-right">
                                             {% for topic in topics %}
                                             <button class="dropdown-item" onclick="setTopic('{{topic.topic}}', '{{topic.id}}')" type="button">{{topic.topic}}</button>
@@ -85,7 +90,7 @@
                                         <input type="hidden" name="topic" id="topic" class="form-username form-control" Required>
                                         <textarea class="form-control" rows="5" name="idea" id="idea" disabled>{{idea}}</textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <a onclick="deleteIdea('{{ideaID}}', '{{currenttopicID}}', '{{currenttopic}}')" class="btn btn-danger">Delete</a>
                                     <a href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
                                 </form>
                             </div>

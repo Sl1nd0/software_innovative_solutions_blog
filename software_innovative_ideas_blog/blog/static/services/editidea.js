@@ -14,9 +14,10 @@ function getUserId() {
     return userid;
 }
 
-function editIdea(ideaID, topicID, userid) {
+function editIdea(ideaID, topicID, userid, currenttopic) {
     document.getElementById('ideaID').value = ideaID;
     document.getElementById('topicID').value = topicID;
+    document.getElementById('currenttopic').value = currenttopic;
 
     var form = document.getElementById('editidea');
     form.appendChild(document.getElementById('ideaID'))

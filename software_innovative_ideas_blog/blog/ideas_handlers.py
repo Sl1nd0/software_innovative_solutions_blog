@@ -1,6 +1,7 @@
 import traceback
 import json
 from .models import Ideas
+from .models import IdeasTopics
 from .models import Users
 from .models import Topics
 from datetime import datetime
@@ -70,6 +71,99 @@ def add_idea(idea):
 
     except Exception as error:
             print("add_idea error")
+            stack_trace = traceback.format_exc()
+            print(stack_trace)
+            print(error)
+            result["success"] = False
+            result["result"] = idea
+            result["error"].append(error)
+    return result
+
+def edit_idea(idea): 
+
+    print("#edit_idea idea")
+    print(idea)
+    result = {"success": False, "result": None, "error": []}
+
+    try:    
+           topic = Topics.objects.filter(id = idea["topicID"]).first()
+
+           if topic is None:
+            result["success"] = False
+            result["result"] = topic
+            result["error"] = "topic doesn't exist for id {0}" .format(idea["topicID"])
+            return result;
+
+           date = datetime.now();
+
+           idea_entity = Ideas.objects.get(id=idea["ideaID"])
+           
+           if idea_entity != None:
+            idea_entity.topicID = topic
+            idea_entity.idea = idea["idea"]
+            idea_entity.save()
+
+           if idea_entity.idea == idea["idea"]:
+            result["success"] = True
+            result["result"] = idea_entity
+            result["error"] = None
+            return result;
+
+           return result;
+
+    except Exception as error:
+            print("edit_idea error")
+            stack_trace = traceback.format_exc()
+            print(stack_trace)
+            print(error)
+            result["success"] = False
+            result["result"] = idea
+            result["error"].append(error)
+    return result
+
+def delete_idea(idea): 
+    print("#delete_idea idea")
+    print(idea)
+    result = {"success": False, "result": None, "error": []}
+
+    try:  
+         
+          idea_topic_entity = IdeasTopics.objects.get(ideaID = idea["ideaID"])
+          
+          print("delete_idea idea_entity")
+          print(idea_topic_entity)
+
+          if idea_topic_entity == None:
+           result["success"] = False
+           result["result"] = idea
+           result["error"].append("IdeasTopic for Idea {0}, doesn't exist" .format(idea["ideaID"]))
+           return result
+
+          idea_topic_entity.delete()
+
+          idea_entity = Ideas.objects.get(id=idea["ideaID"])
+
+          if idea_entity == None:
+           result["success"] = False
+           result["result"] = idea
+           result["error"].append("Idea {0} doesn't exist" .format(idea["ideaID"]))
+           return result
+
+          idea_entity.delete()
+
+          idea_entity = Ideas.objects.filter(id=idea["ideaID"]).first()
+          print("delete_idea idea_entity")
+          print(idea_entity)
+
+          if idea_entity == None:
+           result["success"] = True
+           result["result"] = idea
+           result["error"] = []
+           return result
+          return result
+
+    except Exception as error:
+            print("delete_idea error")
             stack_trace = traceback.format_exc()
             print(stack_trace)
             print(error)

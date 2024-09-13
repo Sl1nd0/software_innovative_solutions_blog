@@ -92,13 +92,26 @@ def edit_post_update(request, userid):
         "idea": request.POST.get("idea"),
         "ideaID": request.POST.get("ideaID"),
         "topicID": request.POST.get("topic"),
+        "currenttopic": request.POST.get("currenttopic"),
         "userid": userid,
      }
 
      print("edit_post_update")
      print("idea")
      print(idea)
-    
+     
+     edit_idea_result = ideas_handlers.edit_idea(idea)
+
+     if edit_idea_result["success"] == False:
+        context["error"] = edit_idea_result["error"]
+        context["idea"] = idea["idea"]
+        context["ideaID"] = idea["ideaID"]
+        context["topicID"] = idea["topicID"]
+        context["currenttopic"] = idea["currenttopic"]
+        context["userid"] = idea["userid"]
+        return HttpResponse(template.render(context, request))     
+     return HttpResponseRedirect("/landing/"+str(userid)) 
+
     return HttpResponse(template.render(context, request))  
     
 def edit_post(request, userid):
@@ -118,7 +131,7 @@ def edit_post(request, userid):
         "ideaID": request.POST.get("ideaID"),
         "topic": request.POST.get("topic"),
         "topicID": request.POST.get("topicID"),
-        "userid": userid,
+        "userid": userid
      }
 
      print("edit_post")
@@ -150,7 +163,8 @@ def delete_post(request, userid):
      idea = {
         "idea": request.POST.get("idea"),
         "ideaID": request.POST.get("ideaID"),
-        "topic": request.POST.get("topic"), 
+        "topic": request.POST.get("topic"),
+        "topicID": request.POST.get("topicID"),
         "userid": userid,
      }
 
@@ -162,15 +176,50 @@ def delete_post(request, userid):
      if my_user_details == None:
       context["error"].append("User doesn't exist for userid {0}" .format(idea["userid"]))
       author = my_user_details["name"] + " " + my_user_details["surname"];
-      
+     
      context["userid"] = idea["userid"]
      context["ideaID"] = idea["ideaID"]
      context["idea"] = idea["idea"]
      context["currenttopic"] = idea["topic"]
+     context["currenttopicID"] = idea["topicID"]
      context["author"] = author
+     return HttpResponse(template.render(context, request))
 
-     return HttpResponse(template.render(context, request))  
     return HttpResponse(template.render(context, request))
+
+def delete_post_update(request, userid):
+    
+    template = loader.get_template('deleteidea.html')
+    context = { }
+
+    if request.method == "POST":
+
+     idea = {
+        "idea": request.POST.get("idea"),
+        "ideaID": request.POST.get("ideaID"),
+        "topicID": request.POST.get("topic"),
+        "currenttopic": request.POST.get("currenttopic"),
+        "userid": userid,
+     }
+
+     print("delete_post_update")
+     print(idea)
+     
+     delete_idea_result = ideas_handlers.delete_idea(idea)
+     print("delete_idea_result")
+     print(delete_idea_result)
+
+     if delete_idea_result["success"] == False:
+        context["error"] = delete_idea_result["error"]
+        context["idea"] = idea["idea"]
+        context["ideaID"] = idea["ideaID"]
+        context["topicID"] = idea["topicID"]
+        context["currenttopic"] = idea["currenttopic"]
+        context["userid"] = idea["userid"]
+        return HttpResponse(template.render(context, request))     
+     return HttpResponseRedirect("/landing/"+str(userid)) 
+
+    return HttpResponse(template.render(context, request))  
 
 def main(request):
   template = loader.get_template('index.html')
@@ -339,8 +388,11 @@ def addidea(request, userid):
         
         addidearesult= ideas_handlers.add_idea(idea)
         
-        print(addidearesult)
-                
+        if addidearesult["success"] == True:
+         return HttpResponseRedirect("/landing/"+str(userid))
+
+        context["error"] = addidearesult["error"][0]
+
         return HttpResponse(template.render(context, request))
 
     listtopicsqueryresult = topics_queries.list_topics_query();

@@ -60,10 +60,12 @@ def delete_topic(id):
            topic_entity = Topics.objects.get(id=id)
 
            topic_entity.delete()    
-            
-           result["success"] = True
-           result["result"] = id
-           result["error"] = []
+           topic_entity = Topics.objects.get(id=id)
+
+           if topic_entity == None:
+            result["success"] = True
+            result["result"] = id
+            result["error"] = []
            return result
 
     except Exception as error:
