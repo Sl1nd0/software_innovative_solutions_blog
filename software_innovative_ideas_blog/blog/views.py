@@ -553,7 +553,14 @@ def editcomment(request, userid):
         #return details to edit comment view
 
         ideas_queries_result = ideas_queries.get_idea_by_id_query(comment_dto["ideaID"])
+        if ideas_queries_result["success"] == False:
+         print(ideas_queries_result["error"])
+         return HttpResponseRedirect("/landing/"+str(userid))
+        
         users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+        if ideas_queries_result["success"] == False:
+         print(ideas_queries_result["error"])
+         return HttpResponseRedirect("/landing/"+str(userid))
 
         print("ideas_queries_result[result]")
         print(ideas_queries_result["result"])
@@ -590,12 +597,18 @@ def deletecomment(request, userid):
         print("comment_dto")
         print(comment_dto)
 
-        #get the idea
-        #get the comment
-        #return details to edit comment view
-
         ideas_queries_result = ideas_queries.get_idea_by_id_query(comment_dto["ideaID"])
-        users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+        
+        if ideas_queries_result["success"] == False:
+         print(ideas_queries_result["error"])
+         return HttpResponseRedirect("/landing/"+str(userid))
+        
+         users_queries_result = users_queries.get_user_by_id_query({"id": userid})
+         if ideas_queries_result["success"] == False:
+          print(ideas_queries_result["error"])
+          return HttpResponseRedirect("/landing/"+str(userid))
+        
+         return HttpResponseRedirect("/landing/"+str(userid))
 
         print("ideas_queries_result[result]")
         print(ideas_queries_result["result"])
