@@ -16,6 +16,7 @@
 </head>
 
 <body>
+    <input type="hidden" value={{userid}} name="id" placeholder=" " class="form-username form-control" id="form-id" Required>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Software Innovative Ideas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,12 +30,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./addpost.html">Post</a>
+                    <a class="nav-link" href="/addidea/{{userid}}">Post</a>
                 </li>
-
+                {% if role == "administrator" %}
                 <li class="nav-item">
-                    <a class="nav-link" href="./topics.html">topics</a>
+                    <a class="nav-link" href="/topics/{{userid}}">topics</a>
                 </li>
+                {% endif %}
 
                 <li class="nav-item">
                     <a class="nav-link" href="/logout/">logout</a>
@@ -65,7 +67,7 @@
                 <div class="col-md-8">
                     <div class="pt-5 container">
                         <div class="row">
-                            <form action="/deletetopic/{{topic.id}}" width="50%" method="POST">
+                            <form action="/deletetopic/{{topic.id}}/{{userid}}" width="50%" method="POST">
                                 {% csrf_token %}
                                 <div class="col-md-12">
                                     <div class="pt-3 container">
@@ -78,7 +80,7 @@
                                                     <input type="text" class="form-control" name="topic" id="topic" value="{{topic.topic}}" style="font-size: 18pt; height: 35px; width:250px;" disabled>
                                                 </div>
                                                 <button type="submit" class="btn btn-danger">Delete</button>
-                                                <a href="/topics/" class="btn btn-secondary">Go Back</a>
+                                                <a href="/topics/{{userid}}" class="btn btn-secondary">Go Back</a>
                                             </div>
                                         </div>
                                     </div>

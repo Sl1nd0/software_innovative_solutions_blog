@@ -18,8 +18,9 @@
 </head>
 
 <body>
+    <input type="hidden" value={{userid}} name="id" placeholder=" " class="form-username form-control" id="form-id" Required>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="./landing.html">Software Innovative Ideas</a>
+        <a class="navbar-brand" href="#">Software Innovative Ideas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,15 +32,16 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./addpost.html">Post</a>
+                    <a class="nav-link" href="/addidea/{{userid}}">Post</a>
                 </li>
+                {% if role == "administrator" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/topics/{{userid}}">topics</a>
+                </li>
+                {% endif %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./topics.html">topics</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="./index.html">logout</a>
+                    <a class="nav-link" href="/logout/">logout</a>
                 </li>
                 <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

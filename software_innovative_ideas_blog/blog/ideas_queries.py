@@ -138,6 +138,6 @@ def get_ideas_and_topics_query(user):
 			stack_trace = traceback.format_exc()
 			print(stack_trace)
 			result["success"] = False
-			result["result"] = user
+			result["result"] = []
 			result["error"].append(error)	
 	return result

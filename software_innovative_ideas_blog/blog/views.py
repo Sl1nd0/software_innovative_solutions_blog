@@ -45,7 +45,10 @@ def landing(request):
     
     ideas_queries_result = ideas_queries.get_ideas_and_topics_query({"userID": user_login_queryresult["result"]["id"]})
 
+    print("ideas_queries_result[result]")
     print(ideas_queries_result["result"])
+    print("ideas_queries_result[result]")
+
     role_query_result = user_roles_queries.get_user_role_by_id_query(user_login_queryresult["result"]["User_roleID_id"])
     print(role_query_result)    
     context["userid"] = user_login_queryresult["result"]["id"]
@@ -56,7 +59,7 @@ def landing(request):
   return HttpResponse(template.render(context, request))
   
 #main_landing
-def main_landing(request, id):
+def main_landing(request, userid):
   
   context = {"topics":"", "userid": "", "ideas": []}
   template = loader.get_template('landing.html')
@@ -67,15 +70,21 @@ def main_landing(request, id):
     context["topics"] = listtopicsqueryresult["result"]
 
     user = {
-    "id": id
+    "id": userid
     }
 
     get_user_by_id_queryresult = users_queries.get_user_by_id_query(user)
     ideas_queries_result = ideas_queries.get_ideas_and_topics_query({"userID": get_user_by_id_queryresult["result"]["id"]})
+
+    role_query_result = user_roles_queries.get_user_role_by_id_query(get_user_by_id_queryresult["result"]["User_roleID_id"])
+    print(role_query_result)    
+
     print(ideas_queries_result["result"])
     print(get_user_by_id_queryresult)
     context["userid"] = get_user_by_id_queryresult["result"]["id"]
     context["ideas"] = ideas_queries_result["result"]
+    context["role"] = role_query_result["result"]["role"]
+
     return HttpResponse(template.render(context, request))
   
   return HttpResponse(template.render(context, request))
@@ -304,10 +313,10 @@ def topics(request, userid):
     context = {"userid": userid}
     return HttpResponse(template.render(context, request))
     
-def edittopic(request, id):
+def edittopic(request, id, userid):
     
     topic = topics_queries.get_topic_by_id_query(id)
-
+    context = {}
     if request.method == "POST":
        
         topic_dto = {
@@ -318,37 +327,40 @@ def edittopic(request, id):
         edittopicresult = topics_handlers.edit_topic(topic_dto)
         
         if edittopicresult["success"] == True:
-         return HttpResponseRedirect("/topics/")
+         context["userid"] = userid
+         return HttpResponseRedirect("/topics/"+str(userid))
         else:
             template = loader.get_template('edittopic.html')
             print(topic)
             context = {"error":edittopicresult["error"][0], "topic": topic["result"]} 
+            context["userid"] = userid
             return HttpResponse(template.render(context, request))
     
-    template = loader.get_template('edittopic.html')
-    context = {"topic": topic["result"]}
+    template = loader.get_template('edittopic.html')   
+    context = {"topic": topic["result"], "userid": userid, "id": id}
+    print(context)
     return HttpResponse(template.render(context, request))
     
-def deletetopic(request, id):
-
+def deletetopic(request, id, userid):
+    topic = topics_queries.get_topic_by_id_query(id)
     if request.method == "POST":
         
         edittopicresult = topics_handlers.delete_topic(id)
-        
+        print("edittopicresult")
+        print(edittopicresult)
         if edittopicresult["success"] == True:
-         return HttpResponseRedirect("/topics/")
+         return HttpResponseRedirect("/topics/"+str(userid))
         else:
             template = loader.get_template('deletetopic.html')
-            print(topic)
             context = {"error":edittopicresult["error"][0], "topic": topic["result"]} 
             return HttpResponse(template.render(context, request))
-
-    topic = topics_queries.get_topic_by_id_query(id)
+    
     template = loader.get_template('deletetopic.html')
-    context = {"topic": topic["result"]}
+    context = {"topic": topic["result"], "userid": userid, "id": id}
+    print(context)
     return HttpResponse(template.render(context, request))
 
-def addtopic(request):
+def addtopic(request, userid):
 
     if request.method == "POST":
        
@@ -361,7 +373,7 @@ def addtopic(request):
         print(addtopicresult)
 
         if addtopicresult["success"] == True:
-         return HttpResponseRedirect("/topics/")
+         return HttpResponseRedirect("/topics/"+str(userid))
         else:
             template = loader.get_template('addtopic.html')
             context = {"error":addtopicresult["error"][0]} 
@@ -369,6 +381,7 @@ def addtopic(request):
 
     template = loader.get_template('addtopic.html')
     context = {}
+    context["userid"] = userid
     return HttpResponse(template.render(context, request))
 
 ###POSTS ideas
@@ -418,12 +431,13 @@ def addcomment(request, userid):
             "authorID": request.POST.get("userID")
         }
         
-        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
 
         all_comments = []
 
         for comment in list_comments_queries["result"]:
-            
+            print("comment[userID_id]")
+            print(list_comments_queries["result"])
             user = Users.objects.filter(id=comment["userID_id"]).first()
 
             if user == None: 
@@ -434,6 +448,7 @@ def addcomment(request, userid):
                 "date": comment["comment_date"],
                 "name": user.name,
                 "surname": user.surname,
+                "canEdit":comment["canEdit"],
                 "userID": user.id
             })
 
@@ -481,7 +496,7 @@ def comment(request, userid):
         add_comment_result = comments_handlers.add_comment(comment_dto)
         print(add_comment_result["result"])
 
-        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto["ideaID"])
+        list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
 
         all_comments = []
 
@@ -494,6 +509,7 @@ def comment(request, userid):
             all_comments.append({
                 "comment": comment["Comment"],
                 "date": comment["comment_date"],
+                "canEdit": comment["canEdit"],
                 "name": user.name,
                 "surname": user.surname
             })

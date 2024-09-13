@@ -4,6 +4,8 @@ from .models import Ideas
 from .models import IdeasTopics
 from .models import Users
 from .models import Topics
+from .models import Comments
+from .models import Likes
 from datetime import datetime
 from . import users_queries
 from . import ideas_topics_handlers
@@ -143,6 +145,14 @@ def delete_idea(idea):
 
     try:  
          
+          idea_comments_entity = Comments.objects.get(ideaID = idea["ideaID"])
+          if idea_comments_entity != None:
+           idea_comments_entity.delete()
+
+          idea_likes_entity = Likes.objects.get(ideaID = idea["ideaID"])
+          if idea_comments_entity != None:
+           idea_likes_entity.delete()
+
           idea_topic_entity = IdeasTopics.objects.get(ideaID = idea["ideaID"])
           
           print("delete_idea idea_entity")
