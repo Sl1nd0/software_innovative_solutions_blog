@@ -121,8 +121,11 @@ def get_ideas_and_topics_query(user):
 				"likes": likes,
 				"comments": comments
 				})
-		
+
 		distinct_ideas = list(map(dict, set(frozenset(d.items()) for d in ideas)))
+		distinct_ideas.sort(key=lambda x: x["ideaID"]) 
+
+		print(distinct_ideas)
 
 		if len(distinct_ideas) > 0:
 			result["success"] = True

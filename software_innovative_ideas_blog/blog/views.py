@@ -22,6 +22,50 @@ from datetime import datetime
 from django.urls import reverse
 from urllib.parse import urlencode
 
+
+def myprofile(request, userid):
+  context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
+  template = loader.get_template('myprofile.html')
+  user_details = user_details_helper.get_user_name_and_sur(userid)
+
+  user_result = users_queries.get_user_by_id_query({"id" : userid})
+  print("user_result ")
+  print(user_result["result"])
+
+  context["userprofiledetails"] = user_result["result"]
+  context["userid"] = user_result["result"]["id"]
+  context["userdetails"] = user_details
+  return HttpResponse(template.render(context, request))
+
+def myprofileupdate(request, userid):
+  context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
+  template = loader.get_template('myprofile.html')
+  user_details = user_details_helper.get_user_name_and_sur(userid)
+
+  if request.method == "POST":    
+    user = {
+    "userid": userid,
+    "name": request.POST.get("name"),
+    "surname": request.POST.get("surname"),
+    "birthdate": request.POST.get("birthdate"),
+    "email": request.POST.get("email"),
+    "cell_number": request.POST.get("number"),
+    "password": request.POST.get("password")
+   }
+    print(user)
+    edit_user_result = users_handlers.edit_user(user)
+    print("edit_user_result")
+    print(edit_user_result)
+
+    user_details = user_details_helper.get_user_name_and_sur(userid)
+
+    if edit_user_result["success"] == False:
+     context["error"] = edit_user_result["error"]
+     return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect("/myprofile/"+str(userid)) 
+  return HttpResponse(template.render(context, request))
+
+#landing
 def landing(request):  
   context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
   template = loader.get_template('landing.html')
@@ -491,9 +535,12 @@ def addcomment(request, userid):
 
         all_comments = []
 
+        print("list_comments_queries")
+        print(list_comments_queries)
         for comment in list_comments_queries["result"]:
             print("comment[userID_id]")
             print(comment)
+
             user = Users.objects.filter(id=comment["userID_id"]).first()
 
             if user == None: 
@@ -728,7 +775,6 @@ def deletecomment(request, userid):
     context = {"topics":[], "userid": "", "role": "", "error": "", "ideadata": ""}    
     template = loader.get_template('deletecomment.html')
 
-    #I need comment id
     if request.method == "POST":
         comment_dto = {
            "ideaID": request.POST.get("ideaID"),
@@ -746,7 +792,7 @@ def deletecomment(request, userid):
 
         if ideas_queries_result["success"] == False:
          print(ideas_queries_result["error"])
-         #return HttpResponseRedirect("/landing/"+str(userid))
+         return HttpResponseRedirect("/landing/"+str(userid))
         
         users_queries_result = users_queries.get_user_by_id_query({"id": userid})
         print("users_queries_result[result]")
@@ -756,7 +802,7 @@ def deletecomment(request, userid):
          print("users_queries_result[result]")
          print(users_queries_result["result"])
          print(users_queries_result["error"])
-          #return HttpResponseRedirect("/landing/"+str(userid))
+         return HttpResponseRedirect("/landing/"+str(userid))
 
          print("ideas_queries_result[result]")
          print(ideas_queries_result["result"])

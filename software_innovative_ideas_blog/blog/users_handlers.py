@@ -38,3 +38,40 @@ def add_user(user):
             result["result"] = user
             result["error"].append(error)
     return result
+
+def edit_user(user): 
+
+    result = {"success": False, "result": None, "error": []}
+
+    try:            
+
+           date = datetime.now();
+
+           user_entity =  Users.objects.get(id=user["userid"])
+
+           if user_entity == None:
+            result["success"] = False
+            result["result"] = user
+            result["error"].append("User doesn't exist for id {0}" .format(user["userid"]))
+            
+           user_entity.name = user["name"]
+           user_entity.surname = user["surname"]
+           user_entity.birthdate = user["birthdate"]
+           user_entity.email = user["email"]
+           user_entity.cell_number = user["cell_number"]
+           user_entity.password = user["password"]
+
+           user_entity.save()
+
+           result["success"] = True
+           result["result"] = Users.objects.filter(id=user["userid"]).first()
+           result["error"] = []
+           return result
+
+    except Exception as error:
+            print("add_user error")
+            print(error)
+            result["success"] = False
+            result["result"] = user
+            result["error"].append(error)
+    return result

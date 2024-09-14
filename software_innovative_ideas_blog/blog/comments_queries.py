@@ -25,6 +25,7 @@ def list_comments_by_idea_query(idea):
 			'canEdit': 0,
 			'userID_id': 0, 
 			'Comment': "",
+			'CommentID': 0,
 			'comment_date': datetime.now()
 			}
 
@@ -46,9 +47,10 @@ def list_comments_by_idea_query(idea):
 			})
 
 		 print("comment_dto ")
-		 print(comment_dto)
-
+		 print(comments)
 		 comments.append(comment_dto)
+
+		comments.sort(key=lambda x: x["id"]) 
 
 		if comments_result is None:
 			result["error"].append("No comments retrieved for idea {0}" .format(idea))
