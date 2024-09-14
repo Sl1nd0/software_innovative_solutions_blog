@@ -22,7 +22,6 @@ from datetime import datetime
 from django.urls import reverse
 from urllib.parse import urlencode
 
-
 def myprofile(request, userid):
   context = {"topics":"", "userid": "", "role": "", "error": "", "ideas": []}
   template = loader.get_template('myprofile.html')
@@ -536,7 +535,7 @@ def addcomment(request, userid):
         all_comments = []
 
         print("list_comments_queries")
-        print(list_comments_queries)
+        #print(list_comments_queries)
         for comment in list_comments_queries["result"]:
             print("comment[userID_id]")
             print(comment)
@@ -557,7 +556,7 @@ def addcomment(request, userid):
             })
 
         print("list_comments_queries[result]")
-        print(list_comments_queries["result"])
+        #print(list_comments_queries["result"])
         context["comments"] = all_comments
 
         print("comment_dto")
@@ -571,9 +570,10 @@ def addcomment(request, userid):
 
         context["idea"] = comment_dto["idea"];
         context["ideaID"] = comment_dto["ideaID"];
-        context["userid"] = userid;
+        context["userid"] = int(userid);
         context["author"] = author;
-        context["userID"] = comment_dto["authorID"];
+        context["userID"] = int(comment_dto["authorID"]);
+        context["authorID"] = int(comment_dto["authorID"]);
         context["userdetails"] = user_details
 
         return HttpResponse(template.render(context, request))
@@ -593,15 +593,14 @@ def comment(request, userid):
             "idea": request.POST.get("idea"),
             "ideaID": request.POST.get("ideaID"),
             "userID": userid, 
-            "authorID": request.POST.get("userID"),
-            "comment":request.POST.get("form_comment")
+            "authorID": request.POST.get("authorID"),
+            "comment" :request.POST.get("form_comment")
         }
                
         print("comment_dto")
         print(comment_dto)
 
         add_comment_result = comments_handlers.add_comment(comment_dto)
-        print(add_comment_result["result"])
 
         list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
 
@@ -622,8 +621,6 @@ def comment(request, userid):
                 "surname": user.surname
             })
 
-        print("list_comments_queries[result]")
-        print(list_comments_queries["result"])
         context["comments"] = all_comments
 
         author = None
@@ -635,9 +632,10 @@ def comment(request, userid):
 
         context["idea"] = comment_dto["idea"];
         context["ideaID"] = comment_dto["ideaID"];
-        context["userid"] = userid;
+        context["userid"] = int(userid);
         context["author"] = author
-        context["userID"] = comment_dto["authorID"];
+        context["userID"] = int(comment_dto["authorID"]);
+        context["authorID"] = int(comment_dto["authorID"]);
         context["userdetails"] = user_details
 
         return HttpResponse(template.render(context, request))
@@ -656,6 +654,7 @@ def editcomment(request, userid):
             "userID": userid,
             "comment":  request.POST.get("comment"),
             "commentID":  request.POST.get("commentID"),
+            "authorID":  request.POST.get("authorID"),
         }
         print("comment_dto")
         print(comment_dto)
@@ -675,25 +674,24 @@ def editcomment(request, userid):
          return HttpResponseRedirect("/landing/"+str(userid))
 
         print("ideas_queries_result[result]")
-        print(ideas_queries_result["result"])
+        #print(ideas_queries_result["result"])
         user_details = user_details_helper.get_user_name_and_sur(userid)
 
         context["idea"] = ideas_queries_result["result"].idea;
         context["ideaID"] = ideas_queries_result["result"].id;
-        context["userid"] = userid;
-        context["userid"] = userid;
+        context["userid"] = int(userid);
+        context["authorID"] = int(comment_dto["authorID"]);
         context["comment"] = comment_dto["comment"];
         context["commentID"] = comment_dto["commentID"];
         context["name"] =  users_queries_result["result"]["name"];
         context["surname"] =  users_queries_result["result"]["surname"];
         context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
-        context["userID"] = userid;
+        context["userID"] = int(users_queries_result["result"]["id"]);
         context["role"] = user_role_helper.get_user_role(userid)
         context["userdetails"] = user_details
 
-        print("context[commentID]")
-        
-        print(context["commentID"])
+        print("context[commentID]")        
+        #print(context["commentID"])
 
         return HttpResponse(template.render(context, request))
     return HttpResponseRedirect("/landing/"+str(userid))
@@ -708,7 +706,7 @@ def editcommentupdate(request, userid):
         comment_dto = {
         "ideaID": request.POST.get("ideaID"),
         "userID": userid, 
-        "authorID": request.POST.get("userID"),
+        "authorID": request.POST.get("authorID"),
         "comment":request.POST.get("comment"),
         "commentID":request.POST.get("commentID")
         }
@@ -720,7 +718,7 @@ def editcommentupdate(request, userid):
         #get the topic and topicID
         ideas_topics_query_result = IdeasTopics.objects.filter(ideaID = comment_dto["ideaID"]).first()
 
-        print(ideas_topics_query_result.topicID.topic)
+        #print(ideas_topics_query_result.topicID.topic)
 
         list_comments_queries = comments_queries.list_comments_by_idea_query(comment_dto)
 
@@ -745,7 +743,7 @@ def editcommentupdate(request, userid):
             })
 
         print("list_comments_queries[result]")
-        print(list_comments_queries["result"])
+        #print(list_comments_queries["result"])
         context["comments"] = all_comments
 
         print("comment_dto")
@@ -764,6 +762,7 @@ def editcommentupdate(request, userid):
         context["userid"] = userid;
         context["author"] = author;
         context["userID"] = comment_dto["authorID"];
+        context["authorID"] = comment_dto["authorID"];
         context["role"] = user_role_helper.get_user_role(userid)
         context["userdetails"] = user_details
 
@@ -779,6 +778,7 @@ def deletecomment(request, userid):
         comment_dto = {
            "ideaID": request.POST.get("ideaID"),
             "userID": userid,
+            "authorID": request.POST.get("authorID"),
             "comment":  request.POST.get("comment"),
             "commentID":  request.POST.get("commentID"),
         }
@@ -810,15 +810,15 @@ def deletecomment(request, userid):
         user_details = user_details_helper.get_user_name_and_sur(userid)
 
         context["idea"] = ideas_queries_result["result"].idea;
-        context["ideaID"] = ideas_queries_result["result"].id;
-        context["userid"] = userid;
-        context["userid"] = userid;
+        context["ideaID"] = ideas_queries_result["result"].id; 
+        context["userid"] = int(userid);
         context["comment"] = comment_dto["comment"];
         context["commentID"] = comment_dto["commentID"];
         context["name"] =  users_queries_result["result"]["name"];
         context["surname"] =  users_queries_result["result"]["surname"];
         context["author"] = users_queries_result["result"]["name"] + " " + users_queries_result["result"]["surname"]
-        context["userID"] = userid;
+        context["userID"] =   int(comment_dto["authorID"]);
+        context["authorID"] =  int(comment_dto["authorID"]);
         context["role"] = user_role_helper.get_user_role(userid)
         context["userdetails"] = user_details
 
@@ -835,7 +835,7 @@ def deletecommentupdate(request, userid):
         comment_dto = {
         "ideaID": request.POST.get("ideaID"),
         "userID": userid, 
-        "authorID": request.POST.get("userID"),
+        "authorID": request.POST.get("authorID"),
         "comment":request.POST.get("comment"),
         "commentID":request.POST.get("commentID")
         }
@@ -894,6 +894,7 @@ def deletecommentupdate(request, userid):
         context["userid"] = userid;
         context["author"] = author;
         context["userID"] = comment_dto["authorID"];
+        context["authorID"] = comment_dto["authorID"];
         context["role"] = user_role_helper.get_user_role(userid)
         context["userdetails"] = user_details
 

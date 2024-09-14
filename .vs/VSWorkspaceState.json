@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\software_innovative_ideas_blog",
-    "\\software_innovative_ideas_blog\\blog"
+    "\\software_innovative_ideas_blog\\blog",
+    "\\software_innovative_ideas_blog\\blog\\static",
+    "\\software_innovative_ideas_blog\\blog\\static\\@floating-ui",
+    "\\software_innovative_ideas_blog\\blog\\static\\services"
   ],
-  "SelectedNode": "\\software_innovative_ideas_blog\\blog\\ideas_handlers.py",
+  "SelectedNode": "\\software_innovative_ideas_blog\\blog\\static\\services\\addcomment.js",
   "PreviewInSolutionExplorer": false
 }

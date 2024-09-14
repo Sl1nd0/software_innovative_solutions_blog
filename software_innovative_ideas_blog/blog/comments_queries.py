@@ -20,15 +20,6 @@ def list_comments_by_idea_query(idea):
 
 		comments = []
 
-		comment_dto = {'id': 0, 
-			'ideaID_id': 0,
-			'canEdit': 0,
-			'userID_id': 0, 
-			'Comment': "",
-			'CommentID': 0,
-			'comment_date': datetime.now()
-			}
-
 		#idea["userID
 		print("idea[userID]")
 		print(idea["userID"])
@@ -45,10 +36,7 @@ def list_comments_by_idea_query(idea):
 			'commentID': comment["id"],
 			'comment_date': comment["comment_date"]
 			})
-
-		 print("comment_dto ")
 		 print(comments)
-		 comments.append(comment_dto)
 
 		comments.sort(key=lambda x: x["id"]) 
 

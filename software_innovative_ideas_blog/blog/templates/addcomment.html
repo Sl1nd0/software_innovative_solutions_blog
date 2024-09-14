@@ -72,11 +72,11 @@
                             <h5 class="card-header"><a href="#">{{author}}</a></h5>
                             <div class="card-body">
                                 <h4></h4>
-                               
+
                                 <div class="pb-4 container">
                                     <div class="row pb-2">
                                         <h5 class="card-text">{{idea}}</h5>
-                                    </div><br/>
+                                    </div><br />
                                     {% for x in comments %}
                                     <div>
                                         <div class="row"> <h5>{{x.name}} {{x.surname}}</h5></div>
@@ -90,7 +90,8 @@
                                                 <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
                                                 <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
                                                 <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
-                                                <a href="#" onclick="editComment({{ideaID}},{{userid}},'{{x.comment}}', {{x.commentID}})">Edit Comment</a>
+                                                <input type="hidden" value="" name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
+                                                <a href="#" onclick="editComment({{ideaID}},{{userid}},{{authorID}}, '{{x.comment}}', {{x.commentID}})">Edit Comment</a>
                                             </form>&nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <form id="deletecomment" action="/deletecomment/{{userid}}" method="post">
@@ -98,8 +99,22 @@
                                                 <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                                 <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
                                                 <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
+                                                <input type="hidden" value="" name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
                                                 <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
-                                                <a href="#" onclick="deleteComment({{ideaID}},{{userid}},'{{x.comment}}', {{x.commentID}})">Delete Comment</a>
+                                                <a href="#" onclick="deleteComment({{ideaID}},{{userid}},{{authorID}},'{{x.comment}}', {{x.commentID}})">Delete Comment</a>
+                                            </form>
+                                            {% endif %}
+                                            <!-- userID is the author user ID, userid is the post viewer or the commenter userid -->
+                                            {%if userID == userid and x.canEdit == 0%}
+                                            &nbsp;&nbsp; &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <form id="deletecomment" action="/deletecomment/{{userid}}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="" name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
+                                                <input type="hidden" value="" name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
+                                                <input type="hidden" value="" name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
+                                                <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
+                                                <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
+                                                <a href="#" onclick="deleteComment({{ideaID}},{{userid}},{{authorID}}, '{{x.comment}}', {{x.commentID}})">Delete Comment</a>
                                             </form>
                                             {% endif %}
                                         </div>
@@ -107,7 +122,7 @@
                                     </div>
                                     {% endfor %}
                                     <label for="comment"><b>Add Comment:</b></label>
-                                    <textarea class="form-control" rows="5" name="comment" id="comment"></textarea>
+                                    <textarea class="form-control" rows="5" name="textcomment" id="textcomment"></textarea>
                                 </div>
                                 <div class="row">
                                     <form action="/addlike/{{userid}}" method="post">
@@ -117,13 +132,14 @@
                                         <input type="hidden" value={{idea}} name="idea" placeholder=" " class="form-username form-control" id="form-id" Required>
                                         <button type="submit" class="btn btn-primary">like</button>
                                     </form>&nbsp;
-                                    <form action="/comment/{{userid}}" onsubmit="setComment('{{userid}}')" method="post">
+                                    <form action="/comment/{{userid}}" id="addcomment" method="post">
                                         {% csrf_token %}
                                         <input type="hidden" value="" name="form_comment" placeholder=" " class="form-username form-control" id="form_comment" Required>
-                                        <input type="hidden" value={{ideaID}} name="ideaID" placeholder=" " class="form-username form-control" id="form-id" Required>
+                                        <input type="hidden" value={{ideaID}} name="ideaID" placeholder=" " class="form-username form-control" id="ideaID" Required>
                                         <input type="hidden" value={{userID}} name="userID" placeholder=" " class="form-username form-control" id="userID" Required>
-                                        <input type="hidden" value={{idea}} name="idea" placeholder=" " class="form-username form-control" id="form-id" Required>
-                                        <button type="submit" class="btn btn-success">Comment</button>
+                                        <input type="hidden" value={{idea}} name="idea" placeholder=" " class="form-username form-control" id="idea" Required>
+                                        <input type="hidden" value={{authorID}} name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
+                                        <a onclick="setComment({{ideaID}}, {{userid}}, {{userID}})" class="btn btn-success">Comment</a>
                                     </form>&nbsp;
                                     <a href="/landing/{{userid}}" class="btn btn-secondary">Go Back</a>
                                 </div>

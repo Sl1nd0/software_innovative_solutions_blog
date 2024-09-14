@@ -3,11 +3,11 @@ function setComment(userid) {
     document.getElementById("form_comment").value = document.getElementById("comment").value;
 }
 
-function editComment(idea, ideaID, userID, commentID) {
+function editComment(idea, ideaID, userID, commentID, authorID) {
     document.getElementById('ideaID').value = ideaID
     document.getElementById('userID').value = userID
     document.getElementById('commentID').value = commentID
-    document.getElementById('authorID').value = userID
+    document.getElementById('authorID').value = authorID
     document.getElementById('comment').value = document.getElementById('new_comment').value
 
     var form = document.getElementById('editcomment');
@@ -21,11 +21,11 @@ function editComment(idea, ideaID, userID, commentID) {
     form.submit();
 }
 
-function goToAddComment(idea, ideaID, userID, commentID) {
+function goToAddComment(idea, ideaID, userID, commentID, authorID) {
     document.getElementById('ideaID').value = ideaID
     document.getElementById('userID').value = userID
     document.getElementById('commentID').value = commentID
-    document.getElementById('authorID').value = userID
+    document.getElementById('authorID').value = authorID
     document.getElementById('comment').value = document.getElementById('new_comment').value
 
     var form = document.getElementById('addcomment');

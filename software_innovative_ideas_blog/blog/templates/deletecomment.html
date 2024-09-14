@@ -88,8 +88,8 @@
                                     <input type="hidden" value="" name="comment" placeholder=" " class="form-username form-control" id="comment" Required>
                                     <input type="hidden" value="" name="commentID" placeholder=" " class="form-username form-control" id="commentID" Required>
                                     <input type="hidden" value="" name="authorID" placeholder=" " class="form-username form-control" id="authorID" Required>
-                                    <a onclick="deleteComment('{{idea}}',{{ideaID}},{{userid}},'{{commentID}}')" class="btn btn-danger">Delete</a>
-                                    <a onclick="goToAddComment('{{idea}}',{{ideaID}},{{userid}},'{{commentID}}')" class="btn btn-secondary">Go Back</a>
+                                    <a onclick="deleteComment('{{idea}}', {{ideaID}}, {{userid}}, '{{commentID}}', {{authorID}})" class="btn btn-danger">Delete</a>
+                                    <a onclick="goToAddComment('{{idea}}', {{ideaID}}, {{userid}}, '{{commentID}}', {{authorID}})" class="btn btn-secondary">Go Back</a>
                                 </form>
                                 <form id="addcomment" action="/addcomment/{{userid}}" method="post">
                                     {% csrf_token %}
