@@ -15,7 +15,7 @@ to start the project run this command
 py manage.py runserver
 
 ----
-To access the DB used which is the sqlite3 DB
+To access the DB used, which is the sqlite3 DB,
 On the virtual enviroment navigate to the project location or folder
 
 run this command 
