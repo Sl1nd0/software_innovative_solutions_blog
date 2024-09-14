@@ -29,22 +29,22 @@ def set_up_test_db():
         print(f"Error running migrations: {e}")
 
     #user_roles_handlers_tests unit tests    
-    users_roles_handlers_tests.add_user_role_success_test({"role": "administrator"}) 
+    users_roles_handlers_tests.add_user_role_success_test({"role": "administrator"})
+    users_roles_handlers_tests.add_user_role_success_test({"role": "user"})
     users_roles_handlers_tests.add_user_role_fail_test({})     
     
     #users_handlers_tests unit tests
     users_handlers_tests.add_user_success_test({
         "name": "test",
         "surname": "test",
-        "email": "ssankabi@gmail.com",
-        "user_name": "ssankabi@gmail.com",
+        "email": "test@gmail.com",
+        "user_name": "test@gmail.com",
         "identifier": "testIdPass",
-        "password": "test123",
-        "cell_number": "test123",
-        "birthdate": "1995/10/06"
+        "password": "testPass123",
+        "cell_number": "testPass123",
+        "birthdate": "1999/01/12"
     })
     users_handlers_tests.add_user_fail_test({})
-
 
     topics_handlers.add_topic({"topic":"test"})
      #ideas_handlers_tests unit tests    
