@@ -103,7 +103,7 @@ def edit_idea(idea):
            if idea_entity == None:
             result["success"] = False
             result["result"] = idea
-            result["error"].append("Idea doesn't exist for idea id {0}'" .format(idea["ideaID"]))
+            result["error"].append("Idea doesn't exist for idea id {0}" .format(idea["ideaID"]))
             return result;
 
            ideas_topics_entity = IdeasTopics.objects.get(ideaID=idea["ideaID"])
