@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\software_innovative_ideas_blog",
-    "\\software_innovative_ideas_blog\\blog",
-    "\\software_innovative_ideas_blog\\blog\\templates"
+    "\\software_innovative_ideas_blog\\blog"
   ],
-  "SelectedNode": "\\software_innovative_ideas_blog\\blog\\templates\\addtopic.html",
+  "SelectedNode": "\\software_innovative_ideas_blog\\blog\\ideas_handlers.py",
   "PreviewInSolutionExplorer": false
 }
