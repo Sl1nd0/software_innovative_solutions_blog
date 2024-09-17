@@ -24,7 +24,3 @@ py manage.py shell
 import and query any entity from this system
 i.e 
 from blog.models import Users
-
-software_innovative_solutions_blog
-
-URL: https://steady-marsh-prune.glitch.me/ USER NAME: glad@gmail.com PASSWORD: 3333
