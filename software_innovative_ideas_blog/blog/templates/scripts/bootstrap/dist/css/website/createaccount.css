@@ -1,0 +1,9 @@
+body {
+    position: relative; 
+    align-content: center;
+    color: white;
+    /*background-image: url("..\\node_modules\\bootstrap\\dist\\css\\website\\images\\createaccount.jpg");*/
+    background-image: url("..\\website\\images\\createaccountpc.png");
+    width: "100%";
+    height: "100%";
+}
